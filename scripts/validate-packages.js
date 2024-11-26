@@ -52,21 +52,9 @@ function processResults() {
   }
 }
 
-// [appPackageJsonPath].forEach(packageJsonPath => {
-//   const packageJson = require(packageJsonPath);
-//   const deps = Object.keys({ ...packageJson.dependencies, ...packageJson.devDependencies });  
-//   deps.forEach(function (dep) {
-//     validateLocalPackage(packageJson, dep);
-//   });
-// });
 
-
-  const packageJson = require(appPackageJsonPath);
-  const deps = Object.keys({ ...packageJson.dependencies, ...packageJson.devDependencies });  
-  deps.forEach(function (dep) {
-    validateLocalPackage(packageJson, dep);
-  });
-
-
+const packageJson = require(appPackageJsonPath);
+const deps = Object.keys({ ...packageJson.dependencies, ...packageJson.devDependencies });  
+deps.forEach((dep) => validateLocalPackage(packageJson, dep));
 
 processResults();
