@@ -29,12 +29,15 @@ export class PfCoingeckoService extends BaseService {
     * To access only the response body, use the one that follows it.
     */
 
-    coinsMarketGetPath$Response(params?: { rows?: string, page?: string, pudoPointId?: string}): Observable<StrictHttpResponse<Array<IPfCoinMarket>>> {
+    apiCoinsMarketGetPath$Response(params?: { rows?: string, page?: string, pudoPointId?: string}): Observable<StrictHttpResponse<Array<IPfCoinMarket>>> {
         const rb = new RequestBuilder(this.coinGeckoBaseURL, PfCoingeckoService.coinsMarketGetPath, 'get');
         if(params){
             rb.path('rows', params.rows);
             rb.path('page', params.page);
-            rb.header('x-cg-demo-api-key', 'CG-x8sLogniDaJxuDFZMWf9z6it')
+
+
+            // -------------------------------------- LOAD ENV VARS
+            rb.header('x-cg-demo-api-key', 'xxxxxxxxxxxxxxxxxxxxx')
         }
         return this.http.request(rb.build({responseType: 'json', accept: 'application/json'})).pipe(
             filter((r: any) => r instanceof HttpResponse), 
@@ -42,8 +45,8 @@ export class PfCoingeckoService extends BaseService {
         );
     }
    
-    coinsMarketGetPath(params?: { rows?: string, page?: string, pudoPointId?: string}): Observable<Array<IPfCoinMarket>> {
-        return this.coinsMarketGetPath$Response(params).pipe(map((r: StrictHttpResponse<Array<IPfCoinMarket>>) => r.body as Array<IPfCoinMarket>));
+    apiCoinsMarketGetPath(params?: { rows?: string, page?: string, pudoPointId?: string}): Observable<Array<IPfCoinMarket>> {
+        return this.apiCoinsMarketGetPath$Response(params).pipe(map((r: StrictHttpResponse<Array<IPfCoinMarket>>) => r.body as Array<IPfCoinMarket>));
     }
 
 
