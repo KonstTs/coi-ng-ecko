@@ -1,1 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
+@import './assets/sass/_normalize';
+@import './assets/sass/_helpers';
+
+*, *:before, *:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
