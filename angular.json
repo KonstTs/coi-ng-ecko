@@ -65,7 +65,8 @@
               "buildTarget": "coi-ng-ecko:build:production"
             },
             "development": {
-              "buildTarget": "coi-ng-ecko:build:development"
+              "buildTarget": "coi-ng-ecko:build:development",
+              "disableHostCheck": true
             }
           },
           "defaultConfiguration": "development"

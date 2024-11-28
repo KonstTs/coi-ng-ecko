@@ -1,4 +1,5 @@
 export interface IPfCoinSearch{
+    id?: string;
     coins?: IPfSearchResultCoin[];
     exchanges?: IPfSearchResultExchange[];
     categories?: IPfSearchResultCategory[];

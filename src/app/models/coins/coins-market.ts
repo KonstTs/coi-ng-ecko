@@ -1,5 +1,5 @@
 export interface IPfCoinMarket {
-  id: string;
+  id?: string;
   symbol?: string;
   name?: string;
   image?: string

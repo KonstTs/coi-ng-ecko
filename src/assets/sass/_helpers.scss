@@ -573,8 +573,8 @@
   .pf-bg-transparent {
     background-color: transparent !important;
   }
-  .pf-txt-color-red {
-    color: #f00000 !important;
+  .pf-txt-color-blue {
+    color: #4285f4 !important;
   }
   .pf-txt-color-green {
     color: #00ba61 !important;
@@ -658,6 +658,9 @@
     background-color: rgba(0,0,0,.4);
   }
   .pf-block {
+    display: block !important;
+  }
+  .pf-inline-block {
     display: block !important;
   }
   .pf-readonly-input,
