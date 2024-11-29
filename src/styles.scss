@@ -1,0 +1,65 @@
+@import './assets/sass/_normalize';
+@import './assets/sass/_helpers';
+@import './assets/sass/variables';
+
+
+
+*, *:before, *:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body{
+  height: 100%;
+  font-family: $fontFamily;
+  font-size: $fontSize;
+  font-weight: $fontWeightNormal;
+  color: #525c65;
+}
+a{
+  display: block; text-decoration: none;
+}
+h1,h2,h3,h4,h5,h6{
+  color: $blue;
+  font-weight: 500;
+}
+.layout-wrapper{
+  height: 100%;
+  position: relative;
+  background-color: $bgColor;
+
+  .topbar{
+    position: fixed;
+    left:0;
+    right: 0;
+    top: 0;
+    color: $white;
+    height: $topbarHeight;
+    display: flex;
+    align-items: center;
+    background-color: $greyDDD;
+
+    .-section{
+      height: inherit;
+      padding:0 2rem;
+      display: flex;
+      align-items: center;
+
+      &.--logo{
+        font-size: 1.56rem;
+        color: $blue;
+        text-transform: uppercase;
+        font-weight: $fontWeightLight;
+        line-height: 80%;
+      }
+    }
+  }
+  .content{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 2rem;
+    top: $topbarHeight;
+  }
+}
