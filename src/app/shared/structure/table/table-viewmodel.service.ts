@@ -1,137 +1,106 @@
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Directive, Injector, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { iif, Observable, of, Subject } from 'rxjs';
-import { catchError, filter, finalize, first, map, switchMap, take, tap } from 'rxjs/operators';
-import { PfBaseEntity } from '../../../models/base-entity';
-// import { PfModelChangeArgs } from '../../../model/model-change-args';
-// import { PfModelChangingArgs } from '../../../model/model-changing-args';
-// import { PfModelProxyService } from '../../../core/services/model-proxy/model-proxy.service';
-// import { PfNotificationService } from '../../../core/services/notification.service';
-// import { StrictHttpResponse } from '@app/api/strict-http-response';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { catchError, finalize, first, map, switchMap, take, tap } from 'rxjs/operators';
+import { PfBaseEntity } from '../../../config/base-entity';
+import { mergeObjects } from '../../utils';
+import { IPfTableBaseColdef } from './table.component';
+// import { LOCALSTORAGE_CACHE_TOKEN, PfCacheService } from '../../../config/cache';
 
-
-
+export type PfQueryFragment = string | number[] | Date;
+export type PfQueryPage = { page?: number; per_page?: number;}
+export const PF_TABLE_BASE_PAGING: PfQueryPage = {page:0, per_page:100} 
 
 @UntilDestroy()
 @Directive()
 export abstract class PfTableViewModelService<TModel extends PfBaseEntity> implements OnInit, OnDestroy {
-    model!: TModel[];
-    response: any;
+    model: TModel[] = [];
+    model$ = new BehaviorSubject<TModel[]>(this.model);
+    paging: PfQueryPage;
+    query: any;
+    columns: string[] = [];
 
+    protected abstract getRowsCb(_query: any): Observable<TModel[]>;
+    protected abstract searchCb(_term:string): Observable<TModel[]>;
+    protected abstract getItemCb(_id:string): Observable<TModel>;
+    // protected notificationSvc: PfNotificationService;
+    protected _isBusy$ = new Subject<boolean>();
+
+    protected emitIsBusy(isBusy: boolean): void {
+        this._isBusy$.next(isBusy);
+    }
 
     get isBusy$(): Observable<boolean> {
       return this._isBusy$.asObservable();
     }
- 
-    // get isDirty$(): Observable<boolean> {
-    //   return this.modelProxySvc.isDirty$;
-    // }
- 
-    protected abstract getRowsCb(): Observable<TModel[]>;
-    // protected abstract getItemCb: (id: string) => Observable<TModel>;
-    protected abstract searchCb(query:string): Observable<TModel[]>;
-    // protected abstract filterCb(query:string): Observable<TModel[]>;
 
- 
-    // notificationSvc: PfNotificationService;
-    // modelProxySvc: PfModelProxyService<TModel[]>;
-
-    protected _isBusy$ = new Subject<boolean>();
-    // protected _isDirty$ = new Subject<boolean>();
- 
-    constructor(injector: Injector) {
-    //   this.modelProxySvc = injector.get<PfModelProxyService<any>>(PfModelProxyService);
-    //   this.notificationSvc = injector.get<PfNotificationService>(PfNotificationService);
-     }
- 
-    // abstract deleteResponse(id: string): Observable<StrictHttpResponse<void>>;
-    ngOnInit(): void {
-      this.init().subscribe(_=> console.log('model', this.model));
+    constructor(
+        injector: Injector,
+        _query:any, 
+        _pagingQuery:PfQueryPage = {}
+    ) 
+    {
+        // this.notificationSvc = injector.get<PfNotificationService>(PfNotificationService);
+        this.query =  structuredClone(_query);
+        this.paging = mergeObjects(structuredClone(PF_TABLE_BASE_PAGING), _pagingQuery);
     }
 
+    // private provideColumnModel = (cols:string[]): IPfTableBaseColdef[] => cols.map(col => [{columnDef: col, header: col.toUpperCase()}])
 
-    ngOnDestroy(): void {
-      this._isBusy$.complete();
-    //   this._isDirty$.complete();
-    }
-
-
-    // setupModelProxy() {
-    // //   this.modelProxySvc.modelChanged = this.modelChanged.bind(this);
-    // //   this.modelProxySvc.modelChanging = this.modelChanging.bind(this);
-    // }
-
-
-    // modelChanged(change: PfModelChangeArgs<TModel>): void {}
-    // modelChanging(change: PfModelChangingArgs<TModel>): boolean | Observable<boolean> {
-    //   return true;
-    // }
-
-
-    init(){
-      return of(null)
-        .pipe(
-          tap(() => this.emitIsBusy(true)),
-          switchMap(() => this.getRowsCb()),
-          tap((res) => this.model = res),
-          finalize(() => {
-            // this.emitIsDirty(false);
-            this.emitIsBusy(false);
-          }),
-          take(1),
-          untilDestroyed(this)
+    getRows$(_query: any){
+        return of(null).pipe(
+            tap(() => this.emitIsBusy(true)),
+            switchMap(() => this.getRowsCb(_query)),
+            tap((res) => {
+                this.model = res ?? [];
+                this.model$.next(this.model)
+            }),
+            catchError(error => {
+                this.handleError$(error);
+                throw error;
+            }),
+            untilDestroyed(this),
+            finalize(() => {
+                this.emitIsBusy(false);
+            })
         )
     }
 
-
-    searchItems(query:string){
-      return of(null)
-        .pipe(
+    searchItems$(_term: string){
+      return of(null).pipe(
           tap(() => this.emitIsBusy(true)),
-          switchMap(() => this.searchCb(query)),
-          tap((res) => this.model = res),
-          finalize(() => {
-            // this.emitIsDirty(false);
-            this.emitIsBusy(false);
+          switchMap(() => this.searchCb(_term)),
+          catchError(error => {
+            this.handleError$(error);
+            throw error;
           }),
-          take(1),
-          untilDestroyed(this)
+          untilDestroyed(this),
+          finalize(() => {
+            this.emitIsBusy(false);
+          })
         )
     }
 
-
-    // filterItems(query:string){
-    //   return of(null)
-    //     .pipe(
-    //       tap(() => this.emitIsBusy(true)),
-    //       switchMap(() => this.filterCb(query)),
-    //       tap((res) => this.model = res),
-    //       finalize(() => {
-    //         // this.emitIsDirty(false);
-    //         this.emitIsBusy(false);
-    //       }),
-    //       take(1),
-    //       untilDestroyed(this)
-    //     )
-    // }
-
-
-
-    // getItem(id:string){}
- 
- 
-    protected emitIsBusy(isBusy: boolean): void {
-      this._isBusy$.next(isBusy);
+    getItem$(_id: string){
+        return of(null).pipe(
+            tap(() => this.emitIsBusy(true)),
+            switchMap(() => this.getItemCb(_id)),
+            catchError(error => {
+              this.handleError$(error);
+              throw error;
+            }),
+            untilDestroyed(this),
+            finalize(() => {
+              this.emitIsBusy(false);
+            })
+          )
     }
+
+
  
-    // protected emitIsDirty(isDirty: boolean): void {
-    //   this._isDirty$.next(isDirty);
-    // }
- 
- 
-    showError(err: HttpErrorResponse): void {
+    handleError$(error: HttpErrorResponse): void {
+        console.log('error:', error)
       // let message: string;
  
       // if (isApiResponse(err.error)) {
@@ -141,6 +110,17 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
       // }
  
     //   this.notificationSvc.showError(I18N.common.unhandledError, 'ERROR');
+    }
+
+    ngOnInit(): void {
+        // console.log('this.query:', this.query)
+        // console.log('this.paging:', this.paging)
+        // this.getRows$({...this.query, ...this.paging}).subscribe()
+    }
+
+    ngOnDestroy(): void {
+      this._isBusy$.complete();
+      this.model$.complete();
     }
  
    

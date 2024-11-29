@@ -37,9 +37,9 @@ export interface IPfTokenMarketData {
   market_cap_change_24h_in_currency?: IPfTokensValueList;
   market_cap_change_percentage_24h_in_currency?: IPfTokensValueList;
   total_supply?: number;
-  max_supply?: number;
+  max_supply?: number | any;
   circulating_supply?: number;
-  last_updated?: Date;
+  last_updated?: Date | string;
 };
 
 export interface IPfTokenCommunityData {

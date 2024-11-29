@@ -1,14 +1,38 @@
-import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, HostBinding, Input, NgModule, OnDestroy, OnInit, forwardRef } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AfterViewInit, Component, HostBinding, Input, NgModule, OnDestroy, OnInit, TemplateRef, forwardRef } from '@angular/core';
 import { PfTableViewModelService } from './table-viewmodel.service';
-import { PfBaseEntity } from '../../../models/base-entity';
-import { PF_TABLE_BASE_ROW_ACTIONS } from '../../../config/table';
-import { IPfTableRowActions, PfTableBaseColumnDefs } from '../../../models/table';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
+export interface IPfTableBaseColdef {
+    columnDef: string;
+    header: string;
+    cell: (item: any) => TemplateRef<unknown> | string | any;
+    //complimentary attrs
+    id?: string;
+    rowClass?: string;
+    cellClass?: string;
+    cellEditor?: string;
+    dropDownOptions?: any[];
+    optionLabel?: string;
+    optionValue?: string;
+    date?: boolean;
+    sort?: boolean;
+    filter?: boolean;
+    rowClick?: Function;
+}
+
+export interface IPfTableRowAction {
+    id?: string;
+    icon?: string;
+    hostClass?: string;
+    command?: (...args: any) => void;
+  }
 
 
 @Component({
   selector: 'pf-table',
+  standalone: true,
+  imports:[MatTableModule, MatPaginatorModule],
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
@@ -16,21 +40,27 @@ export class PfTableComponent implements OnInit, OnDestroy, AfterViewInit {
     static nextId = 0;
     @HostBinding() id = `pf-table-${PfTableComponent.nextId++}`;
 
-    @Input() VM!: PfTableViewModelService<PfBaseEntity>;
-    @Input() cols: PfTableBaseColumnDefs[] | any = [];
+    @Input() VM!: PfTableViewModelService<any>;
+    @Input() columns: IPfTableBaseColdef[] = [];
     @Input() pagination: boolean = true;
-    @Input() total = false;
     @Input() rowsPerPage = 100;
     @Input() rowsPerPageOptions = [50, 100, 150, 200, 250];
-    @Input() reorderable = false;
-    @Input() filterable = true;
-    @Input() sortable = true;
-    @Input() frozenColumns: string[] = [];
+    @Input() totalsCount = false;
+    
+    @Input() search = true;
+    @Input() sort = true;
+    @Input() filter = true;
+    @Input() reorder = false;
+    @Input() freeze: string[] = [];
+    
+    @Input() stripe = true;
     @Input() styles: any = undefined;
-    @Input() striped = true;
-    @Input() rowActions: IPfTableRowActions[] = [];
+
+    @Input() rowActions: IPfTableRowAction[] = [];
     @Input() hideActions = true;
     @Input() rowClick: ((...args: any) => void) | undefined;
+
+    displayedColumns: string[] = [];
 
     constructor(){}
 
@@ -39,24 +69,15 @@ export class PfTableComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnInit(): void {
-      if(this.VM && this.VM.ngOnInit) this.VM.ngOnInit();
+      this.VM.ngOnInit();
     }
 
     ngAfterViewInit(): void {
     }
 
     ngOnDestroy(): void {
-      if(this.VM && this.VM.ngOnDestroy) this.VM.ngOnDestroy()
+      this.VM.ngOnDestroy()
     }
 
 }
-
-
-@NgModule({
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
-  exports: [PfTableComponent],
-  declarations: [PfTableComponent]
-})
-export class PfTableModule {}
-
 

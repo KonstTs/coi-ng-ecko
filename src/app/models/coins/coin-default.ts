@@ -25,7 +25,7 @@ export interface IPfCoinDefault {
         repos_url?: any;
         image?: IPfTokenImages;
         country_origin?: string;
-        genesis_date?: Date;
+        genesis_date?: Date | string;
         sentiment_votes_up_percentage?: number;
         sentiment_votes_down_percentage?: number;
         watchlist_portfolio_users?: number;
@@ -34,7 +34,7 @@ export interface IPfCoinDefault {
         community_data?: IPfTokenCommunityData;
         developer_data?: IPfTokenDeveloperData;
         status_updates?: any;
-        last_updated?: Date;
+        last_updated?: Date | string;
         tickers?: IPfTokenTickers[]
 }
 

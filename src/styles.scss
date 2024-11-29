@@ -9,14 +9,19 @@
   padding: 0;
   box-sizing: border-box;
 }
-a{display: block; text-decoration: none;}
-
 html, body{
   height: 100%;
   font-family: $fontFamily;
   font-size: $fontSize;
   font-weight: $fontWeightNormal;
   color: #525c65;
+}
+a{
+  display: block; text-decoration: none;
+}
+h1,h2,h3,h4,h5,h6{
+  color: $blue;
+  font-weight: 500;
 }
 .layout-wrapper{
   height: 100%;
@@ -54,7 +59,7 @@ html, body{
     left: 0;
     right: 0;
     bottom: 0;
-    padding: 20px;
+    padding: 2rem;
     top: $topbarHeight;
   }
 }
