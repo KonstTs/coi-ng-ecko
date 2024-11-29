@@ -1,4 +1,5 @@
-# CoiNgEcko
+# coi-ng-ecko
+ Angular-based dashboard spa, performing organised cryptocurrency data representation and graphic visualization
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.11.
 
