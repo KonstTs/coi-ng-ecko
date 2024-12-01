@@ -443,16 +443,20 @@
     display: flex !important;
     align-items: center !important;
   }
-  .pf-coloumn-flex {
+  @mixin pf-coloumn-flex-mixin{
     display: flex;
     align-items: stretch;
     height: 100%;
     flex-flow: column nowrap;
   }
+  .pf-coloumn-flex {
+    @include pf-coloumn-flex-mixin;
+  }
+  
   .pf-row-flex {
       display: flex;
       align-items: stretch;
-      width: 100%;
+      width: 100%; 
       flex-flow: row wrap;
     }
   .pf-flex {

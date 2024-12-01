@@ -1,49 +1,62 @@
-import { AfterViewInit, Component, InjectionToken, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PfDashboardViewModelService } from './dashboard-viewmodel.service';
-import { PF_DASHBOARD_BASE_QUERY, PF_DASHBOARD_COLUMNS as dbc } from '../../config/table';
+import { PF_DASHBOARD_COLUMNS as dbc, PF_DASHBOARD_LAYOUT_MODES as mode } from './dashboard-config';
 import { IPfTableBaseColdef, PfTableComponent } from "../../shared/structure/table/table.component";
-
-export const PF_DASHBOARD_BASE_QUERY_TOKEN = new InjectionToken<any>('PF_DASHBOARD_BASE_QUERY');
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   standalone: true,
-  providers:[
-    PfDashboardViewModelService, 
-    {provide: PF_DASHBOARD_BASE_QUERY_TOKEN, useValue: PF_DASHBOARD_BASE_QUERY}
-  ],
+  imports: [PfTableComponent, AsyncPipe],
+  providers: [PfDashboardViewModelService],
+  styleUrls: ['./dashboard.component.scss'],
   template: `
-    <section>
-        <h1>{{title}}</h1>
-        <pf-table
-           [VM]="VM"
-           [columns]="columns"
-        ></pf-table>
-    </section>
-  `,
-  styles: [ 
+    <div class="dashboard -docked">
 
-  ],
-  imports: [PfTableComponent]
+      <section class="card -coins">
+        <div class="_header">
+          <h2 class="_title">{{titleCoins}}</h2>
+          <!-- <mat-form-field> -->
+            <!-- <input matInput (keyup)="VM.search($event)" placeholder="search"> -->
+          <!-- </mat-form-field> -->
+        </div>    
+
+        <pf-table
+          [VM]="VM"
+          [columns]="columns"
+          [displayedColumns]="displayedColumns"
+          [stick]="true"
+        ></pf-table>
+      </section>
+
+      <section class="card -charts">
+        <div class="_header">
+          <h2 class="_title">{{titleCharts}}</h2>
+        </div>    
+
+      </section>
+  </div>
+  `
 })
 export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy{
-  title = 'Coins';
-  descr!:string;
-  columns!:IPfTableBaseColdef[]
-  displayedColumns!:string[];
+  @ViewChild(PfTableComponent) PfTable: PfTableComponent;
+  titleCoins = 'Coins';
+  titleCharts = 'Charts';
+  columns:IPfTableBaseColdef[];
+  displayedColumns:string[];
 
   constructor(public VM:PfDashboardViewModelService){
-    this.columns = [...dbc];
+    this.columns = dbc;
     this.displayedColumns = this.columns.map(({columnDef}) => columnDef)
-    console.log('this.columns:', this.columns)
-    
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  ngAfterViewInit(): void {
-  }
+  ngAfterViewInit(): void {}
 
   ngOnDestroy(): void {
   }
 }
+
+
+
+// <section class="pf-height pf-jc-center-flex pf-coloumn-flex">

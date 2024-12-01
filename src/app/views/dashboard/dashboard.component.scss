@@ -1,0 +1,32 @@
+@use "../../../assets/sass/variables" as *;
+
+
+.dashboard{
+    .card{
+        border-radius: $borderRadius;
+        background-color: #f1f1f1;
+        padding: 1rem 1.1rem;
+    
+        ._header{
+            border-bottom: 2px solid $blue;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            background-color: #ddd;
+            padding: .54rem 1rem .5rem 1rem;
+
+            ._title{
+            }
+        }
+    }
+
+    &.-docked{
+        .-coins{
+            height: 100%;
+            margin-bottom: 1.5rem;
+        }
+        .-charts{
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+    }
+}
