@@ -1,18 +1,18 @@
-<div class="pf-table-wrapper">
-  <table mat-table [dataSource]="VM.model" class="mat-elevation-z8 demo-table pf-table">
-
+<div class="pf-table-wrapper" [ngClass]="{'-sticky': stick}">
+  <table #MatTable mat-table [dataSource]="VM.model$ | async" class="mat-elevation-z8 pf-table">
     @for (column of columns; track column) {
-        <ng-container [matColumnDef]="column.columnDef">
-          <th mat-header-cell *matHeaderCellDef class="">
-            {{column.header}}
-          </th>
-          <td mat-cell *matCellDef="let row">
-            {{column.cell(row)}}
-          </td>
-        </ng-container>
-      }
-  
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <ng-container [matColumnDef]="column.columnDef">
+        <th mat-header-cell *matHeaderCellDef>
+          {{column.header}}
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{column.cell(row)}}
+        </td>
+      </ng-container>
+    }
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 </div>
+

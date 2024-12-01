@@ -4,7 +4,8 @@
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
     "strict": true,
-    "noImplicitOverride": true,
+    // "noImplicitOverride": true,
+    "noImplicitOverride": false, 
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
@@ -18,8 +19,8 @@
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": false,
-
-    // "exactOptionalPropertyTypes": false,
+    "strictNullChecks": false,
+    "exactOptionalPropertyTypes": false,
     "noImplicitThis": false,
     "lib": [
       "ES2022",

@@ -1,0 +1,60 @@
+@use 'variables';
+@use 'helpers';
+
+.layout-wrapper{
+    height: 100%;
+    width: 100%;
+    position: relative;
+    background-color: #c5c5c5;
+  
+  
+    .topbar{
+      position: fixed;
+      left:0;
+      right: 0;
+      top: 0;
+      color: variables.$white;
+      height: variables.$topbarHeight;
+      display: flex;
+      align-items: center;
+      padding:0 2rem;
+      background-color: variables.$greyDDD;
+      border-bottom: variables.$borderWhite;
+      border-top: variables.$borderWhite;
+      
+      ._section{
+        height: inherit;
+        // padding:0 2rem;
+        display: flex;
+        align-items: center;
+  
+        &.-logo{
+          font-size: 1.56rem;
+          color: variables.$blue;
+          text-transform: uppercase;
+          font-weight: variables.$fontWeight500;
+          line-height: 80%;
+          // border-bottom: solid;
+          // border-top: solid;
+          // box-shadow: $shadowGentle;
+        }
+      }
+    }
+  
+    .content{
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 1.5rem 2rem 0 2rem;
+      top: variables.$topbarHeight;
+
+      .-docked{
+        @include helpers.pf-coloumn-flex-mixin;
+        @include helpers.pf-motion-mixin;
+      }
+    }
+  }
+
+  
+  

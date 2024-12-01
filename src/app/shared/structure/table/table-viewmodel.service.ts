@@ -1,26 +1,34 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Directive, Injector, OnDestroy, OnInit } from '@angular/core';
+import { Directive, InjectionToken, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { catchError, finalize, first, map, switchMap, take, tap } from 'rxjs/operators';
 import { PfBaseEntity } from '../../../config/base-entity';
 import { mergeObjects } from '../../utils';
 import { IPfTableBaseColdef } from './table.component';
+import { MatColumnDef, MatTable } from '@angular/material/table';
 // import { LOCALSTORAGE_CACHE_TOKEN, PfCacheService } from '../../../config/cache';
 
-export type PfQueryFragment = string | number[] | Date;
-export type PfQueryPage = { page?: number; per_page?: number;}
-export const PF_TABLE_BASE_PAGING: PfQueryPage = {page:0, per_page:100} 
+// export const PF_TABLE_QUERY_TOKEN = new InjectionToken<any>('PF_TABLE_QUERY');
+export const PF_TABLE_COLDEFS_TOKEN = new InjectionToken<any>('PF_TABLE_COLDEFS');
+// export const PF_BASE_COLOUMNS = 
+export interface IPfTablePaginationOptions { page?: number; per_page?: number;}
+export const PF_TABLE_BASE_PAGING_OPTIONS: IPfTablePaginationOptions = {page:0, per_page:100};
+// export type PfTableRowAtcionsType = 'delete' | 'edit' | 'duplicate';
+
 
 @UntilDestroy()
 @Directive()
 export abstract class PfTableViewModelService<TModel extends PfBaseEntity> implements OnInit, OnDestroy {
-    model: TModel[] = [];
-    model$ = new BehaviorSubject<TModel[]>(this.model);
-    paging: PfQueryPage;
-    query: any;
-    columns: string[] = [];
+    model: TModel[];
+    model$ = new BehaviorSubject<TModel[]>([]);
+    
+    // query: any;
+    // columns: IPfTableBaseColdef[];
+    // displayedColumns: string[];
 
+    paging: IPfTablePaginationOptions;
+    
     protected abstract getRowsCb(_query: any): Observable<TModel[]>;
     protected abstract searchCb(_term:string): Observable<TModel[]>;
     protected abstract getItemCb(_id:string): Observable<TModel>;
@@ -35,15 +43,14 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
       return this._isBusy$.asObservable();
     }
 
-    constructor(
-        injector: Injector,
-        _query:any, 
-        _pagingQuery:PfQueryPage = {}
-    ) 
+    constructor() 
     {
-        // this.notificationSvc = injector.get<PfNotificationService>(PfNotificationService);
-        this.query =  structuredClone(_query);
-        this.paging = mergeObjects(structuredClone(PF_TABLE_BASE_PAGING), _pagingQuery);
+      // this.columns = _columns;
+      // this.displayedColumns = !!_columns.length && _columns.map(({columnDef}) => columnDef);
+      // this.paging = mergeObjects(structuredClone(PF_TABLE_BASE_PAGING_OPTIONS), _paging);
+
+      // this.notificationSvc = injector.get<PfNotificationService>(PfNotificationService);
+        
     }
 
     // private provideColumnModel = (cols:string[]): IPfTableBaseColdef[] => cols.map(col => [{columnDef: col, header: col.toUpperCase()}])
@@ -53,6 +60,7 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
             tap(() => this.emitIsBusy(true)),
             switchMap(() => this.getRowsCb(_query)),
             tap((res) => {
+              console.log('getRows:', res) 
                 this.model = res ?? [];
                 this.model$.next(this.model)
             }),
@@ -115,7 +123,7 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
     ngOnInit(): void {
         // console.log('this.query:', this.query)
         // console.log('this.paging:', this.paging)
-        // this.getRows$({...this.query, ...this.paging}).subscribe()
+        this.getRows$({}).subscribe()
     }
 
     ngOnDestroy(): void {
