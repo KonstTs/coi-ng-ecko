@@ -1,32 +1,66 @@
 @use "../../../assets/sass/variables" as *;
 
-
 .dashboard{
     .card{
         border-radius: $borderRadius;
         background-color: #f1f1f1;
         padding: 1rem 1.1rem;
-    
         ._header{
             border-bottom: 2px solid $blue;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
             background-color: #ddd;
-            padding: .54rem 1rem .5rem 1rem;
+            padding: 0 1rem;
+            display: flex !important;
+            align-items: center;
+            justify-content: space-between !important;
+            height: 50px;
 
-            ._title{
+            ._section{
+                display: flex
+            }
+
+            &::ng-deep pf-text{
+                .mdc-text-field{padding: 0 !important;}
+            }
+
+            ._title{}
+        }
+    }
+
+    .--coins{
+        height: 100%;
+        margin-bottom: 1.5rem;
+    }
+
+    .--dock{
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        z-index: 1;
+        ._charts{
+            height: 30vh;
+            overflow: auto;
+        }
+    }
+
+    &.--docked{
+        &.--min{
+            .--coins{
+                height: 100%;
+                margin-bottom: 1.5rem;
+            }    
+            .--dock{
+                ._header{
+                    background-color: $blue;
+                    ._title{ color: $white;}
+                }
+                ._charts{
+                    height: 0;
+                    overflow: hidden;
+                }
             }
         }
     }
-
-    &.-docked{
-        .-coins{
-            height: 100%;
-            margin-bottom: 1.5rem;
-        }
-        .-charts{
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
-        }
-    }
 }
+// :host ::ng-deep{{}
+// .mdc-text-field

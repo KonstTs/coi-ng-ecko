@@ -22,17 +22,32 @@ export class PfCoingeckoService extends BaseService {
       super(config, http);
     }
 
-    static readonly coinsMarketGetPath = '/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&sparkline=false&per_page={rows}&page={page}';
+    static readonly coinsMarketGetPath = '/api/v3/coins/markets?vs_currency={vs_currency}d&order={order}sparkline=false&per_page={rows}&page={page}';
     static readonly coinsSearchGetPath = '/api/v3/search?query={query}';
     static readonly coinsSingleGetPath = '/api/v3/coins/{id}';
+    static readonly coinsCurrenciesGetPath = '/api/v3/simple/supported_vs_currencies';
 
     /**
     * "methodName$Response" methods provide access to the full `HttpResponse`, allowing access to response headers.
     * To access only the response body, use the one that follows it.
     */
 
+    //currencies
+    apiCoinsCurrenciesGet$Response(params?: { vs_currency:string; rows?: string, page?: string }): Observable<StrictHttpResponse<Array<string>>> {
+        const rb = new RequestBuilder(environment.coinGeckoBaseURL, PfCoingeckoService.coinsCurrenciesGetPath, 'get');
+
+        return this.http.request(rb.build({responseType: 'json', accept: 'application/json'})).pipe(
+            filter((r: any) => r instanceof HttpResponse), 
+            map((r: HttpResponse<any>) => r as StrictHttpResponse<Array<string>>)
+        );
+    }
+   
+    apiCoinsCurrenciesGet(params?: { vs_currency:string; rows?: string, page?: string }): Observable<Array<string>> {
+        return this.apiCoinsCurrenciesGet$Response(params).pipe(map((r: StrictHttpResponse<Array<string>>) => r.body as Array<string>));
+    }
+
     //market
-    apiCoinsMarketGet$Response(params?: { rows?: string, page?: string }): Observable<StrictHttpResponse<Array<IPfCoinMarket>>> {
+    apiCoinsMarketGet$Response(params?: { vs_currency:string; rows?: string, page?: string }): Observable<StrictHttpResponse<Array<IPfCoinMarket>>> {
         const rb = new RequestBuilder(environment.coinGeckoBaseURL, PfCoingeckoService.coinsMarketGetPath, 'get');
         if(params){
             rb.path('rows', params.rows);
@@ -45,7 +60,7 @@ export class PfCoingeckoService extends BaseService {
         );
     }
    
-    apiCoinsMarketGet(params?: { rows?: string, page?: string}): Observable<Array<IPfCoinMarket>> {
+    apiCoinsMarketGet(params?: { vs_currency:string; rows?: string, page?: string }): Observable<Array<IPfCoinMarket>> {
         return this.apiCoinsMarketGet$Response(params).pipe(map((r: StrictHttpResponse<Array<IPfCoinMarket>>) => r.body as Array<IPfCoinMarket>));
     }
 

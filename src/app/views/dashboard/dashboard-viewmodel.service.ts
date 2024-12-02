@@ -1,31 +1,30 @@
 import { Inject, Injectable, InjectionToken, Injector, OnDestroy, OnInit, forwardRef } from '@angular/core';
 import { of, switchMap } from 'rxjs';
-import { PfTableViewModelService } from '../../shared/structure/table/table-viewmodel.service';
+import { PF_TABLE_COLDEFS_TOKEN, PfTableViewModelService } from '../../shared/structure/table/table-viewmodel.service';
 import { PfCoin } from '../../models/coins/coin-global-type';
 import { PfCoingeckoService } from '../../api/services/coins-services.service';
 import { dummy } from '../../config/table';
 import { IPfTableBaseColdef } from '../../shared/structure/table/table.component';
+import { MatPaginator } from '@angular/material/paginator';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
 
-
+@UntilDestroy()
 @Injectable()
-export class PfDashboardViewModelService extends PfTableViewModelService<PfCoin> implements OnInit, OnDestroy {
+export class PfDashboardViewModelService extends PfTableViewModelService<any> implements OnInit, OnDestroy {
     protected override getRowsCb = this.getRows.bind(this);
     protected override searchCb = this.search.bind(this);
     protected override getItemCb = this.getItem.bind(this);
-    query = {
-        vs_currency: 'usd',
-        order: 'market_cap_desc',
-        sparkline: false
-      }
+    query = { vs_currency: 'usd', order: 'market_cap_desc', sparkline: false }
 
     constructor(
+        @Inject(PF_TABLE_COLDEFS_TOKEN) public columns:IPfTableBaseColdef[],
         @Inject(forwardRef(() => PfCoingeckoService)) public apiSvc: PfCoingeckoService
     ){
-        super();
+        super(columns);
     }
 
-    processReponse = (res:PfCoin[]) => {
+    private processReponse = (res:PfCoin[]) => {
         return res;
     }
 
@@ -41,14 +40,15 @@ export class PfDashboardViewModelService extends PfTableViewModelService<PfCoin>
     }
 
     getItem(_id: string){
-        return this.apiSvc.apiCoinsSingleGet({id: _id})
+        // return this.apiSvc.apiCoinsSingleGet({id: _id})
+        return of()
     }
 
-    override ngOnInit(): void {
+    ngOnInit(): void {
         super.ngOnInit()
     }
 
-    override ngOnDestroy() {
+    ngOnDestroy() {
         super.ngOnDestroy();
     }
 }

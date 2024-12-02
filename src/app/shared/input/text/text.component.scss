@@ -1,0 +1,102 @@
+@use "../../../../assets/sass/variables" as *;
+
+:host{ 
+    width: 100%;
+    &::ng-deep{
+    label{
+        font-size: .9rem;
+        color: #999 !important;
+        // top: 22px;
+        margin-left: 15px;
+        margin-top: -0.6rem;
+        // line-height: 130%;
+    }
+
+    input{
+        &.ng-invalid, &.ng-valid{
+            box-shadow:none !important;
+            border: 1px solid transparent !important;
+            height: 37px !important;
+        }
+    }
+    .mat-mdc-form-field{
+        width: 100%;
+    }
+    .mat-mdc-input-element {
+        font-size: 1rem;
+        color: #666;
+        height: 28px;
+        background: #f1f1f1;
+        padding: 0.5rem;
+        transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+        appearance: none;
+        border-radius: $borderRadiusInput;
+
+        .mdc-floating-label{display: none;} 
+    }
+    .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input{ 
+        color: $inputColor;
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: 300;
+        background-color: $inputBg;
+        // @include pf-motion-mixin;
+        &:focus{
+            color: $blue !important;
+            // background-color: #fff;
+        }
+    }
+    .mat-mdc-input-element:enabled:hover, .mat-mdc-input-element:enabled:focus, input:not([type]):focus:not([readonly]){
+        // border: 2px solid $blue !important;
+    }
+    .mat-mdc-form-field-icon-suffix{
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        right: 0;
+        left: auto;
+        top: 0;
+        bottom: auto;
+        .mat-mdc-icon-button{
+            width: 30px;
+            height: 30px;
+            // background: red;
+            position: absolute;
+            right: 0;
+            top: 0;
+            left: auto;
+            margin: 0;
+            padding: 0;
+            .mat-icon{
+                height: 30px;
+                width: 27px;
+                line-height: 230%;
+            }
+
+            .mat-mdc-button-persistent-ripple{
+
+            }
+        }
+
+    }
+    .mat-mdc-form-field-subscript-wrapper, .mdc-line-ripple{
+        display: none;
+    }
+    .pf-table-filter-input{
+        height: 30px;
+        border-radius: $borderRadiusInput;
+        border: none;
+        text-align: center;
+        font-weight: 300;
+        background-color: $inputBg;
+        color: $inputColor;
+    }
+    
+
+    &.__invalid{
+        input[type=text]{
+            border-color: #f00000 !important;
+        }
+    }
+
+}}
