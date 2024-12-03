@@ -78,14 +78,12 @@ export class PfSelectComponent extends PfInputBase implements OnInit, AfterViewI
 
   ngOnInit(): void {
     super.ngOnInit();
-    // if(this.optionsFn) this.options = this.optionsFn();
-    // if(this.optionsFn$) this.optionsFn$().pipe(take(1), untilDestroyed(this)).subscribe(res => this.options = res)
+    if(this.optionsFn) this.options = this.optionsFn();
+    if(this.optionsFn$) this.optionsFn$().pipe(take(1), untilDestroyed(this)).subscribe(res => this.options = res)
   }
 
   ngAfterViewInit(): void {
     super.ngAfterViewInit();
-    if(this.optionsFn) this.options = this.optionsFn();
-    if(this.optionsFn$) this.optionsFn$().pipe(take(1), untilDestroyed(this)).subscribe(res => this.options = res)
   }
 
   ngOnDestroy(): void {

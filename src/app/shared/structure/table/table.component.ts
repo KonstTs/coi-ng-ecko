@@ -28,7 +28,7 @@ export interface IPfTableRowAction {
   selector: 'pf-table',
   standalone: true,
   imports:[
-    CommonModule, AsyncPipe, MatFormField, MatInputModule,
+    CommonModule, MatInputModule,
     MatPaginator, MatTableModule, MatPaginatorModule,MatSortModule
   ],
   templateUrl: './table.component.html',

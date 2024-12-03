@@ -19,6 +19,19 @@
             ._section{
                 display: flex
             }
+            pf-select{
+                display: flex;
+                height: 53px;
+                align-items: flex-end;
+                .mat-mdc-select{
+                    padding-top: 20px !important;
+                }
+                .mat-mdc-form-field-infix{
+                    height: 50px;
+                }
+
+                // *{border-bottom: none !important;}
+            }
 
             &::ng-deep pf-text{
                 .mdc-text-field{padding: 0 !important;}

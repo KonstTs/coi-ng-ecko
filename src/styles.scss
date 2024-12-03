@@ -1,8 +1,7 @@
 @use "assets/sass/index" as *;
 @import './assets/sass/_normalize';
 @import './assets/sass/_layout';
-@import './assets/sass/components';
-
+@import './assets/sass/overrides';
 
 
 *, *:before, *:after {
@@ -23,4 +22,21 @@ h1,h2,h3,h4,h5,h6{
   color: $blue;
   font-weight: 500;
 }
+.cdk-overlay-connected-position-bounding-box{
+  position: absolute;
 
+  .cdk-overlay-pane{
+    position: absolute;
+    background-color: #fff;
+    box-shadow: $shadowGentle;
+  }
+}
+.pf-table-filter-input{
+  height: 30px;
+  border-radius: $borderRadiusInput;
+  border: none;
+  text-align: center;
+  font-weight: 300;
+  background-color: $inputBg;
+  color: $inputColor;
+}

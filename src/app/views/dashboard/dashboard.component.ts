@@ -11,30 +11,36 @@ import { IPfSelectOptions, PfSelectComponent } from "../../shared/input/select/s
 import { SelectMapperService } from '../../shared/services/select-mapper.service';
 import {COIN_ORDER_QUERY_PARAMS as cop} from '../../../app/views/dashboard/dashboard-config';
 import { currency } from '../../config/table';
+import { PF_DASHBOARD_FILTERS, PF_TABLE_FILTER_MODEL_TOKEN } from '../../config/filter-defs';
+
 
 @Component({
   standalone: true,
-  imports: [PfTableComponent, CommonModule, PfTextComponent, PfSelectComponent],
-  providers: [PfDashboardViewModelService, SelectMapperService, {provide: PF_TABLE_COLDEFS_TOKEN, useValue: dbc}],
+  imports: [
+    PfTableComponent, 
+    CommonModule, 
+    PfSelectComponent
+  ],
+  providers: [
+      PfDashboardViewModelService, 
+      SelectMapperService, 
+      {provide: PF_TABLE_FILTER_MODEL_TOKEN, useValue: PF_DASHBOARD_FILTERS},
+      {provide: PF_TABLE_COLDEFS_TOKEN, useValue: dbc}],
   styleUrls: ['./dashboard.component.scss'],
   template: `
     <div class="dashboard --docked" [ngClass]="layout['hostClass']">
 
       <section class="card --coins">
-        <div class="_header" style="height: 200px;">
-          
+        <div class="_header">
           <div class="pf-ai-jc-center-flex --title">
             <h2>{{titleCoins}}</h2>
           </div>
-          
-          <div class="pf-ai-jc-center-flex --filters" style="background-color: red;">
+          <div class="pf-ai-jc-center-flex --filters">
             <input class="pf-table-filter-input" #filterCtrl matInput (keyup)="PfTable.onFilter($event)" #input>
             <pf-select [label]="'Currency'" [optionsFn$]="currencies$"></pf-select>
             <pf-select [label]="'Order'" [options]="orderOptions"></pf-select>
           </div>
-
           <div class="pf-ai-jc-center-flex --search"></div>
-
         </div>    
 
         <pf-table
@@ -76,7 +82,6 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy{
     this.modes = pflm;
     this.provideLayout('min');
     this.orderOptions = cop;
-    console.log('this.orderOptions:', this.orderOptions)
     this.columns = dbc;
     this.displayedColumns = this.columns.map(({columnDef}) => columnDef);
 

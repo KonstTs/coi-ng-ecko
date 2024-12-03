@@ -82,17 +82,7 @@
     .mat-mdc-form-field-subscript-wrapper, .mdc-line-ripple{
         display: none;
     }
-    .pf-table-filter-input{
-        height: 30px;
-        border-radius: $borderRadiusInput;
-        border: none;
-        text-align: center;
-        font-weight: 300;
-        background-color: $inputBg;
-        color: $inputColor;
-    }
     
-
     &.__invalid{
         input[type=text]{
             border-color: #f00000 !important;

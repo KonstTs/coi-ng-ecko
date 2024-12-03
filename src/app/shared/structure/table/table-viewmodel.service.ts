@@ -1,18 +1,15 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Directive, InjectionToken, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, Observable, of, ReplaySubject, Subject } from 'rxjs';
-import { catchError, finalize, first, map, switchMap, take, tap } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
 import { PfBaseEntity } from '../../../config/base-entity';
 import { mergeObjects } from '../../utils';
 import { IPfTableBaseColdef } from './table.component';
-import { MatColumnDef, MatTable, MatTableDataSource } from '@angular/material/table';
-// import { LOCALSTORAGE_CACHE_TOKEN, PfCacheService } from '../../../config/cache';
+import { MatTableDataSource } from '@angular/material/table';
+import { IPfPaginationModel, PfFilterModel } from '../../../config/filter-defs';
 
-// export const PF_TABLE_QUERY_TOKEN = new InjectionToken<any>('PF_TABLE_QUERY');
 export const PF_TABLE_COLDEFS_TOKEN = new InjectionToken<IPfTableBaseColdef[]>('PF_TABLE_COLDEFS');
-export interface IPfTablePaginationOptions { page?: number; per_page?: number;}
-export const PF_TABLE_BASE_PAGING_OPTIONS: IPfTablePaginationOptions = {page:0, per_page:100};
 
 
 @UntilDestroy()
@@ -24,7 +21,8 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
     
     columns: IPfTableBaseColdef[];
     displayedColumns: string[];
-    paging: IPfTablePaginationOptions;
+    baseFilterModel: IPfPaginationModel = {page: 1, per_page: 100}
+    filterModel: PfFilterModel<any>
     
     protected abstract getRowsCb(_query: any): Observable<TModel[]>;
     protected abstract searchCb(_term:string): Observable<TModel[]>;
@@ -35,19 +33,18 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
     protected emitIsBusy(isBusy: boolean): void {
         this._isBusy$.next(isBusy);
     }
-
     get isBusy$(): Observable<boolean> {
       return this._isBusy$.asObservable();
     }
 
-    constructor(_columns: IPfTableBaseColdef[]) 
+    constructor(_columns: IPfTableBaseColdef[], _filters: PfFilterModel<any>) 
     {
       this.columns = _columns;
       this.displayedColumns = this.columns.map(({columnDef}) => columnDef);
-      // this.notificationSvc = injector.get<PfNotificationService>(PfNotificationService);
-        
-    }
+      this.filterModel = mergeObjects(this.baseFilterModel, _filters ?? {});
 
+      // this.notificationSvc = injector.get<PfNotificationService>(PfNotificationService);
+    }
 
     getRows$(_query?: any){
         return of(null).pipe(
@@ -104,15 +101,8 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
  
     handleError$(error: HttpErrorResponse): void {
         console.log('error:', error)
-      // let message: string;
- 
-      // if (isApiResponse(err.error)) {
-      //   message = err.error.messages.map((msg) => msg.message).join('\n');
-      // } else {
-      //   message = err.error.Message || err.error.title;
-      // }
- 
-    //   this.notificationSvc.showError(I18N.common.unhandledError, 'ERROR');
+      //const message = err.error.Message || err.error.title;
+      //this.notificationSvc.showError(I18N.common.unhandledError, 'ERROR');
     }
 
     ngOnInit(): void {

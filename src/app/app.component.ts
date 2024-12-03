@@ -10,7 +10,7 @@ import { PfTableComponent } from './shared/structure/table/table.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HttpClientModule, PfTableComponent, CommonModule, PfTextComponent],
+  imports: [RouterOutlet, HttpClientModule, CommonModule, PfTextComponent],
   providers:[PfDashboardViewModelService, PfCoingeckoService, AsyncPipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
