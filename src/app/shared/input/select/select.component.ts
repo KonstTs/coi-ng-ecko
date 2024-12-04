@@ -34,17 +34,17 @@ export class PfSelectComponent extends PfInputBase implements OnInit, AfterViewI
 
   @HostBinding() id = `pf-select-${PfSelectComponent.nextId++}`;
   name = `pf-select-${PfSelectComponent.nextId++}`;
-
   @ViewChild(NgModel) model: NgModel;
   
   @Input() label: string;
   @Input() options: any[];
+  @Input() multiple = false;
   @Input() field: string;
   @Input() readonly = false;
   @Input() disabled = false;
   @Input() required = false;
-  @Input() optionLabel = 'name';
-  @Input() optionValue = 'id';
+  @Input() optionLabel = 'label';
+  @Input() optionValue = 'value';
   selected:any;
 
 
@@ -52,7 +52,7 @@ export class PfSelectComponent extends PfInputBase implements OnInit, AfterViewI
   @Input() optionsFn$: (...args: any) => Observable<any[]>;
 
 
-  constructor(injector: Injector) {
+  constructor(injector: Injector) { 
     super(injector);
   }
 
@@ -79,7 +79,10 @@ export class PfSelectComponent extends PfInputBase implements OnInit, AfterViewI
   ngOnInit(): void {
     super.ngOnInit();
     if(this.optionsFn) this.options = this.optionsFn();
-    if(this.optionsFn$) this.optionsFn$().pipe(take(1), untilDestroyed(this)).subscribe(res => this.options = res)
+    if(this.optionsFn$) this.optionsFn$().pipe(take(1), untilDestroyed(this)).subscribe(res => {
+      console.log('res:', res)
+      this.options = res
+    });
   }
 
   ngAfterViewInit(): void {

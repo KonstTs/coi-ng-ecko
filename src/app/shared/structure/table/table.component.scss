@@ -13,7 +13,7 @@
         }
 
         .mat-mdc-paginator-container{
-            justify-content: center;
+            justify-content: right;
         } 
 
         .mat-mdc-paginator-range-label{
@@ -30,7 +30,14 @@
         }
 
         .mat-mdc-paginator-page-size-select{
-            width: 50px;
+            width: 80px;
+            height: 60px;
+        }
+        .mat-mdc-paginator {
+            .mat-mdc-select-value{
+                text-align: left;
+                width: auto;
+            }
         }
     }
 

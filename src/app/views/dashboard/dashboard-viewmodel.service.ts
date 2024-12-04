@@ -38,7 +38,9 @@ export class PfDashboardViewModelService extends PfTableViewModelService<any> im
 
     search(_term: string) {
         // return this.apiSvc.apiCoinsSearchGet({ query: _term });
+        console.log('this.filterModel 1:', this.filterModel)
         console.log('search:', _term)
+        console.log('this.filterModel 2:', this.filterModel)
         return of(dummy);
     }
 
@@ -49,6 +51,7 @@ export class PfDashboardViewModelService extends PfTableViewModelService<any> im
 
     ngOnInit(): void {
         super.ngOnInit()
+        console.log('this.filterModel 0:', this.filterModel)
     }
 
     ngOnDestroy() {

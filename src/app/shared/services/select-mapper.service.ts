@@ -4,6 +4,7 @@ import { PfBaseSearchModel } from '../../config/base-search-model';
 import { PfCoingeckoService } from '../../api/services/coins-services.service';
 import { IPfSelectOptions } from '../input/select/select.component';
 import { COIN_ORDER_QUERY_PARAMS } from '../../views/dashboard/dashboard-config';
+import { map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,9 @@ export class SelectMapperService {
   constructor(private _injector: Injector){}
 
   readonly currencies = () => {
-    return (this.resolveAutoGetAllFn(PfCoingeckoService, 'apiCoinsCurrenciesGet') as any)
+    return (this.resolveAutoGetAllFn(PfCoingeckoService, 'apiCoinsCurrenciesGet') as any).pipe(
+      switchMap(currencies => of((<string[]>currencies).map((c, i) => ({id:i, label:c, value:c}))))
+    )
   };
   
   

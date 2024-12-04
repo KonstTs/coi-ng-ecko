@@ -12,6 +12,7 @@ import { SelectMapperService } from '../../shared/services/select-mapper.service
 import {COIN_ORDER_QUERY_PARAMS as cop} from '../../../app/views/dashboard/dashboard-config';
 import { currency } from '../../config/table';
 import { PF_DASHBOARD_FILTERS, PF_TABLE_FILTER_MODEL_TOKEN } from '../../config/filter-defs';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
@@ -19,8 +20,9 @@ import { PF_DASHBOARD_FILTERS, PF_TABLE_FILTER_MODEL_TOKEN } from '../../config/
   imports: [
     PfTableComponent, 
     CommonModule, 
-    PfSelectComponent
-  ],
+    PfSelectComponent,
+    FormsModule
+   ],
   providers: [
       PfDashboardViewModelService, 
       SelectMapperService, 
@@ -33,12 +35,37 @@ import { PF_DASHBOARD_FILTERS, PF_TABLE_FILTER_MODEL_TOKEN } from '../../config/
       <section class="card --coins">
         <div class="_header">
           <div class="pf-ai-jc-center-flex --title">
-            <h2>{{titleCoins}}</h2>
+            <h2 class="pf-mrgr10">{{titleCoins}}</h2>
+            <input 
+              #filterCtrl  
+              matInput
+              class="pf-table-filter-input"
+              (keyup)="PfTable.onFilter($event)"
+            >
           </div>
           <div class="pf-ai-jc-center-flex --filters">
-            <input class="pf-table-filter-input" #filterCtrl matInput (keyup)="PfTable.onFilter($event)" #input>
-            <pf-select [label]="'Currency'" [optionsFn$]="currencies$"></pf-select>
-            <pf-select [label]="'Order'" [options]="orderOptions"></pf-select>
+            <pf-select 
+              [label]="'Columns'" 
+              [options]="columnsMap"
+              [multiple]="true" 
+              (ngModelChange)="toggle($event)"
+            >
+            </pf-select>
+            <pf-select 
+              style="width: 120px;"
+              [label]="'Currency'" 
+              [optionsFn$]="currencies$"
+              [(ngModel)]="VM.filterModel.vs_currency" 
+              (ngModelChange)="search$($event)"
+            >
+            </pf-select>
+            <pf-select 
+              [label]="'Order'" 
+              [options]="orderOptions" 
+              [(ngModel)]="VM.filterModel.order" 
+              (ngModelChange)="search$($event)"
+            >
+            </pf-select>
           </div>
           <div class="pf-ai-jc-center-flex --search"></div>
         </div>    
@@ -58,7 +85,7 @@ import { PF_DASHBOARD_FILTERS, PF_TABLE_FILTER_MODEL_TOKEN } from '../../config/
         <div class="_header pf-motion" (click)="provideLayout('default')">
           <h2 class="_title">{{titleCharts}}</h2>
         </div>    
-        <div class="_charts  pf-motion-fast"></div>
+        <div class="_charts pf-motion-fast"></div>
       </section>
   </div>
   `
@@ -70,6 +97,7 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy{
   titleCharts = 'Charts';
   searchLabel = ''
   columns: IPfTableBaseColdef[];
+  columnsMap: any;
   displayedColumns: string[];
   layout: IPfDashboardLayoutType;
   modes: IPF_DASHBOARD_MODE;
@@ -84,17 +112,22 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy{
     this.orderOptions = cop;
     this.columns = dbc;
     this.displayedColumns = this.columns.map(({columnDef}) => columnDef);
+    this.columnsMap = this.columns.map((c, i) => ({id:i, label:c.header, value:true}));
 
     this.search$ = (e) => {
       return this.VM.search(e);
     }
 
     this.currencies$ = () => {
-      // return this._selectMapperSvc.currencies()
-      return of(currency)
+      return this._selectMapperSvc.currencies()
+      // return of(currency)
     }
 
     // this.VM.getRows({}).subscribe()
+  }
+
+  toggle(e: any){
+    console.log('e', e)
   }
 
   provideLayout(type: string) {

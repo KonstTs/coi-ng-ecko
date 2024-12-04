@@ -56,6 +56,7 @@ export class PfTableComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() searchable = true;
     @Input() sortable: boolean;
     @Input() filterable: boolean;
+    @Input() filterableColumns: boolean;
     @Input() reorderable = false;
     @Input() freeze: string[] = [];
     @Input() sticky = false;
@@ -86,8 +87,6 @@ export class PfTableComponent implements OnInit, OnDestroy, AfterViewInit {
     ngAfterViewInit(): void {
       this.VM.tableDataSource.sort = this.sort;
       this.VM.tableDataSource.paginator = this.paginator;
-      console.log('this.sort:', this.sort)
-      console.log('this.paginator:', this.paginator)
       this.paginator.page.pipe(
         tap(res => console.log('res:', res))
       ).subscribe()

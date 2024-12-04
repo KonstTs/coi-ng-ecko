@@ -6,6 +6,7 @@ import { PfCoingeckoService } from './api/services/coins-services.service';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { PfTextComponent } from './shared/input/text/text.component';
 import { PfTableComponent } from './shared/structure/table/table.component';
+import { PfSelectComponent } from './shared/input/select/select.component';
 
 @Component({
   selector: 'app-root',
