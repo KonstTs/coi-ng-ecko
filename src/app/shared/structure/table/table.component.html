@@ -12,7 +12,7 @@
     matSort 
     class="mat-elevation-z8 pf-table"
   >
-    @for (column of columns; track column) {
+    @for (column of VM.columns; track column) {
       <ng-container [matColumnDef]="column.columnDef">  
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           {{column.header}}
@@ -23,12 +23,11 @@
       </ng-container>
     }
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-header-row *matHeaderRowDef="VM.displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: VM.displayedColumns;"></tr>
     
   </table>
 </div>
 @if(pagination){
-  <mat-paginator [pageSize]="pagesize" [pageSizeOptions]="pageSizeOptions" aria-label="Page"></mat-paginator>
+  <mat-paginator [pageSize]="pagesize" aria-label="Page"></mat-paginator>
 }
-  <!-- <mat-paginator [length]="dataSource.data.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page"></mat-paginator> -->

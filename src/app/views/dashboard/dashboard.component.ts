@@ -13,6 +13,10 @@ import {COIN_ORDER_QUERY_PARAMS as cop} from '../../../app/views/dashboard/dashb
 import { currency } from '../../config/table';
 import { PF_DASHBOARD_FILTERS, PF_TABLE_FILTER_MODEL_TOKEN } from '../../config/filter-defs';
 import { FormsModule } from '@angular/forms';
+import { SESSIONSTORAGE_CACHE } from '../../config/cache';
+import { PfBrowserCacheService } from '../../shared/services/browser-cache.service';
+import { PfHorizontalScrollerDirective } from '../../shared/directives/horizontal-scroll.directive';
+import { PfChartComponent } from '../../shared/structure/charts/pf-chart.component';
 
 
 @Component({
@@ -21,11 +25,14 @@ import { FormsModule } from '@angular/forms';
     PfTableComponent, 
     CommonModule, 
     PfSelectComponent,
-    FormsModule
+    FormsModule,
+    PfHorizontalScrollerDirective,
+    // PfChartComponent
    ],
   providers: [
       PfDashboardViewModelService, 
       SelectMapperService, 
+      SESSIONSTORAGE_CACHE,
       {provide: PF_TABLE_FILTER_MODEL_TOKEN, useValue: PF_DASHBOARD_FILTERS},
       {provide: PF_TABLE_COLDEFS_TOKEN, useValue: dbc}],
   styleUrls: ['./dashboard.component.scss'],
@@ -48,7 +55,7 @@ import { FormsModule } from '@angular/forms';
               [label]="'Columns'" 
               [options]="columnsMap"
               [multiple]="true" 
-              (ngModelChange)="toggle($event)"
+              [(ngModel)]="VM.displayedColumns"
             >
             </pf-select>
             <pf-select 
@@ -60,6 +67,7 @@ import { FormsModule } from '@angular/forms';
             >
             </pf-select>
             <pf-select 
+              style="width: 180px;"
               [label]="'Order'" 
               [options]="orderOptions" 
               [(ngModel)]="VM.filterModel.order" 
@@ -67,17 +75,14 @@ import { FormsModule } from '@angular/forms';
             >
             </pf-select>
           </div>
-          <div class="pf-ai-jc-center-flex --search"></div>
         </div>    
 
         <pf-table
           [VM]="VM"
-          [columns]="columns"
-          [displayedColumns]="displayedColumns"
           [filterable]="true"
           [sticky]="true"
           [pagination]="true"
-          [pagesize]="10"
+          [pagesize]="250"
         ></pf-table>
       </section>
 
@@ -85,7 +90,11 @@ import { FormsModule } from '@angular/forms';
         <div class="_header pf-motion" (click)="provideLayout('default')">
           <h2 class="_title">{{titleCharts}}</h2>
         </div>    
-        <div class="_charts pf-motion-fast"></div>
+        <div class="_charts pf-motion-fast">
+
+         <!-- <pf-chart></pf-chart> -->
+
+        </div>
       </section>
   </div>
   `
@@ -106,29 +115,28 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy{
   search$: (e: any) => Observable<PfCoin[]>
   currencies$: () => Observable<string[]>
 
-  constructor(public VM:PfDashboardViewModelService, @Inject(SelectMapperService) private _selectMapperSvc:SelectMapperService){
+  constructor(
+    public VM:PfDashboardViewModelService, 
+    @Inject(SelectMapperService) private _selectMapperSvc:SelectMapperService
+    
+  ){
     this.modes = pflm;
-    this.provideLayout('min');
+    this.provideLayout('default');
     this.orderOptions = cop;
-    this.columns = dbc;
-    this.displayedColumns = this.columns.map(({columnDef}) => columnDef);
-    this.columnsMap = this.columns.map((c, i) => ({id:i, label:c.header, value:true}));
+    this.columnsMap = this.VM.columns.map((c, i) => ({label:c.header, value:c.columnDef}));
+    console.log('this.VM:', this.VM)
 
     this.search$ = (e) => {
       return this.VM.search(e);
     }
 
     this.currencies$ = () => {
-      return this._selectMapperSvc.currencies()
-      // return of(currency)
+      return this._selectMapperSvc.currencies() as any
     }
 
     // this.VM.getRows({}).subscribe()
   }
 
-  toggle(e: any){
-    console.log('e', e)
-  }
 
   provideLayout(type: string) {
     if (this.layout?.id === type) return;

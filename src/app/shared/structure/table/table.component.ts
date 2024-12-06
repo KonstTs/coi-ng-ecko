@@ -49,8 +49,8 @@ export class PfTableComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() columns?: IPfTableBaseColdef[];
     @Input() displayedColumns?: string[];
     @Input() pagination: boolean = true;
-    @Input() pagesize = 100;
-    @Input() pageSizeOptions = [10, 15, 20, 200, 250];
+    @Input() pagesize = 250;
+    @Input() pageSizeOptions = [100, 150, 200, 250];
     @Input() totalsCount = false;
     
     @Input() searchable = true;

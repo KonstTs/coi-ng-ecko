@@ -51,7 +51,6 @@ export class PfDashboardViewModelService extends PfTableViewModelService<any> im
 
     ngOnInit(): void {
         super.ngOnInit()
-        console.log('this.filterModel 0:', this.filterModel)
     }
 
     ngOnDestroy() {

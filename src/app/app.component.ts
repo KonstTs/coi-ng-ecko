@@ -18,6 +18,6 @@ import { PfSelectComponent } from './shared/input/select/select.component';
 })
 export class AppComponent {
   title = 'coi-ng-ecko';
-  @Output() requestAnnouncement = new EventEmitter<string>;
-  announceRequest = (e: Event) => this.requestAnnouncement.emit((<HTMLInputElement>e.target).value)
+  // @Output() requestAnnouncement = new EventEmitter<string>;
+  // announceRequest = (e: Event) => this.requestAnnouncement.emit((<HTMLInputElement>e.target).value)
 }

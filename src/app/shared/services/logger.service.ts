@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
-import { PfLoggingLevel } from '../config/enums';
-import { PF_ENVIRONMENT, PfEnvironment } from '../config/environment';
+import { PfLoggingLevel } from '../../config/enums';
+import { PF_ENVIRONMENT, PfEnvironment } from '../../config/environment';
 
 @Injectable()
 export class PfLoggerService {

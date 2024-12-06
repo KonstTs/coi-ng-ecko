@@ -1,23 +1,27 @@
-import { Injectable, Injector } from '@angular/core';
+import { Inject, Injectable, Injector } from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
 import { PfBaseSearchModel } from '../../config/base-search-model';
 import { PfCoingeckoService } from '../../api/services/coins-services.service';
-import { IPfSelectOptions } from '../input/select/select.component';
-import { COIN_ORDER_QUERY_PARAMS } from '../../views/dashboard/dashboard-config';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
+import { PfBrowserCacheService } from '../services/browser-cache.service';
+import { SESSIONSTORAGE_CACHE_TOKEN } from '../../config/cache';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SelectMapperService {
-  private readonly _defaultSearchModelPaginationArgs: PfBaseSearchModel = { page: 1, pageSize: 100 };
+  private readonly _defaultSearchModelPaginationArgs: PfBaseSearchModel = { page: 1, pageSize: 250 };
 
-  constructor(private _injector: Injector){}
+  constructor(private _injector: Injector, @Inject(SESSIONSTORAGE_CACHE_TOKEN) private _cacheSvc:PfBrowserCacheService){}
 
   readonly currencies = () => {
-    return (this.resolveAutoGetAllFn(PfCoingeckoService, 'apiCoinsCurrenciesGet') as any).pipe(
-      switchMap(currencies => of((<string[]>currencies).map((c, i) => ({id:i, label:c, value:c}))))
+    return this._cacheSvc.get('pfcurrencies').pipe(
+      switchMap(cached => cached ? of(cached) : (this.resolveAutoGetAllFn(PfCoingeckoService, 'apiCoinsCurrenciesGet') as any)),
+      tap(cur => this._cacheSvc.set('pfcurrencies', cur)),
+      switchMap(currencies => of((<string[]>currencies).map((c, i) => ({id:i, label:c, value:c})))),
     )
+
+
   };
   
   
@@ -30,27 +34,6 @@ export class SelectMapperService {
     } 
     return entityService[searchMethodName]();
   }
-
-
-private resolveEnumByValueFn(enumObject: any, key: any | any[]): Observable<any[]> {
-    // Check for multiple values
-    if (Array.isArray(key)) {
-      if (key.length === 0) return of(null);
-
-      let enums = [];
-      for (const rec in enumObject) if (key.includes(enumObject[rec].value)) enums.push(enumObject[rec]);
-      return of(enums);
-    }
-
-    for (const rec in enumObject) {
-      if (enumObject[rec].value === key || enumObject[rec].key === key) {
-        return of(enumObject[rec]);
-      }
-    }
-    return of(null);
-  }
-
-
 
 
 }

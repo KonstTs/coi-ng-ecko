@@ -4,7 +4,7 @@ import { PfInputBase } from '../input-base';
 import { Observable, take } from 'rxjs';
 import { untilDestroyed } from '@ngneat/until-destroy';
 import {MatInputModule} from '@angular/material/input';
-import {MatSelectModule} from '@angular/material/select';
+import {MatSelect, MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
 
@@ -24,7 +24,7 @@ const PF_INPUT_BASE = { provide: PfInputBase, useExisting: forwardRef(() => PfSe
 @Component({
   selector: 'pf-select',
   standalone: true,
-  imports: [FormsModule, MatFormFieldModule, MatSelectModule, MatInputModule],
+  imports: [FormsModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatSelect],
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
   providers: [VALUE_ACCESSOR, PF_INPUT_BASE]
@@ -35,7 +35,9 @@ export class PfSelectComponent extends PfInputBase implements OnInit, AfterViewI
   @HostBinding() id = `pf-select-${PfSelectComponent.nextId++}`;
   name = `pf-select-${PfSelectComponent.nextId++}`;
   @ViewChild(NgModel) model: NgModel;
+  @ViewChild(MatSelect) select: MatSelect;
   
+  selected:any;
   @Input() label: string;
   @Input() options: any[];
   @Input() multiple = false;
@@ -45,16 +47,18 @@ export class PfSelectComponent extends PfInputBase implements OnInit, AfterViewI
   @Input() required = false;
   @Input() optionLabel = 'label';
   @Input() optionValue = 'value';
-  selected:any;
-
-
+  
   @Input() optionsFn: (...args: any) => any[];
   @Input() optionsFn$: (...args: any) => Observable<any[]>;
-
 
   constructor(injector: Injector) { 
     super(injector);
   }
+
+  close(){
+    console.log('onClose')
+  }
+
 
   onChange = (_: any) => {};
   onTouched = () => {};
@@ -79,14 +83,14 @@ export class PfSelectComponent extends PfInputBase implements OnInit, AfterViewI
   ngOnInit(): void {
     super.ngOnInit();
     if(this.optionsFn) this.options = this.optionsFn();
-    if(this.optionsFn$) this.optionsFn$().pipe(take(1), untilDestroyed(this)).subscribe(res => {
-      console.log('res:', res)
-      this.options = res
-    });
+    if(this.optionsFn$) this.optionsFn$().pipe(take(1), untilDestroyed(this)).subscribe(res => this.options = res);
   }
 
   ngAfterViewInit(): void {
     super.ngAfterViewInit();
+    this.select.openedChange.pipe(untilDestroyed(this)).subscribe(open => {
+      this.select.panel?.nativeElement?.addEventListener('mouseleave', () => setTimeout(() =>this. select.close(), 300))
+    })
   }
 
   ngOnDestroy(): void {

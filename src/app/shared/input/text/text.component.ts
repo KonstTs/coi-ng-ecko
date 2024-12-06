@@ -13,7 +13,7 @@ import {MatFormFieldModule, MatLabel} from '@angular/material/form-field';
 
 
 const VALUE_ACCESSOR = { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => PfTextComponent), multi: true };
-const LM_INPUT_BASE = { provide: PfInputBase, useExisting: forwardRef(() => PfTextComponent) };
+const PF_INPUT_BASE = { provide: PfInputBase, useExisting: forwardRef(() => PfTextComponent) };
 
 
 @UntilDestroy()
@@ -23,7 +23,7 @@ const LM_INPUT_BASE = { provide: PfInputBase, useExisting: forwardRef(() => PfTe
   imports: [MatIconModule, MatButtonModule, FormsModule, MatInputModule, MatFormFieldModule, MatLabel],
   templateUrl: './text.component.html',
   styleUrls: ['./text.component.scss'],
-  providers: [VALUE_ACCESSOR, LM_INPUT_BASE],
+  providers: [VALUE_ACCESSOR, PF_INPUT_BASE],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PfTextComponent extends PfInputBase implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor {

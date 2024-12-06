@@ -21,7 +21,7 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
     
     columns: IPfTableBaseColdef[];
     displayedColumns: string[];
-    baseFilterModel: IPfPaginationModel = {page: 1, per_page: 100}
+    baseFilterModel: IPfPaginationModel = {page: 1, per_page: 250}
     filterModel: PfFilterModel<any>
     
     protected abstract getRowsCb(_query: any): Observable<TModel[]>;
