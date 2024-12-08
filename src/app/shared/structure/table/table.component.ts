@@ -9,6 +9,7 @@ import { MatFormField } from '@angular/material/form-field';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { debounceTime, distinctUntilChanged, from, fromEvent, of, Subject, switchMap, tap } from 'rxjs';
 import { PfBaseEntity } from '../../../config/base-entity';
+import { TrustHTMLPipe } from '../../directives/html-sanitizer.directive';
 
 export interface IPfTableBaseColdef {
     columnDef: string;
@@ -28,7 +29,7 @@ export interface IPfTableRowAction {
   selector: 'pf-table',
   standalone: true,
   imports:[
-    CommonModule, MatInputModule,
+    CommonModule, MatInputModule, TrustHTMLPipe,
     MatPaginator, MatTableModule, MatPaginatorModule,MatSortModule
   ],
   templateUrl: './table.component.html',

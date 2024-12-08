@@ -38,10 +38,10 @@ export const PF_DASHBOARD_LAYOUT_MODES = {
 };
 
 export const COIN_ORDER_QUERY_PARAMS = [
-  { value: 'market_cap_asc', label: 'Market cap asc' },
-  { value: 'market_cap_desc', label: 'Marketcap Desc' },
-  { value: 'volume_asc', label: 'Vol Aasc' },
-  { value: 'volume_desc', label: 'Vol Dec' },
+  { value: 'market_cap_asc', label: 'MCap Asc' },
+  { value: 'market_cap_desc', label: 'MCap Desc' },
+  { value: 'volume_asc', label: 'Vol Asc' },
+  { value: 'volume_desc', label: 'Vol Desc' },
   { value: 'id_asc', label: 'Id Asc' },
-  { value: 'id_desc', label: 'Id Dsc' }
+  { value: 'id_desc', label: 'Id Desc' }
 ];

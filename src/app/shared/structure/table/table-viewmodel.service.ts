@@ -51,7 +51,6 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
             tap(() => this.emitIsBusy(true)),
             switchMap(() => this.getRowsCb(_query)),
             tap((res) => {
-              console.log('getRows:', res) 
                 this.model = res;
                 this.tableDataSource = new MatTableDataSource(this.model);
                 this.source$.next(this.tableDataSource)

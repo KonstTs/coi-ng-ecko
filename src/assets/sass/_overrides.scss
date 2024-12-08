@@ -67,10 +67,14 @@ div.mat-mdc-select-panel{
     }
 
     .mdc-list-item__primary-text{
-        font-size: .9rem !important;
+        font-size: .96rem !important;
     
         &:hover{
             color: $blue !important;
         }
     } 
+}
+
+.material-symbols-outlined{
+    font-weight: 300 !important;
 }

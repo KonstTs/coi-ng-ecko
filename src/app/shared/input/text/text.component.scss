@@ -16,9 +16,10 @@
         &.ng-invalid, &.ng-valid{
             box-shadow:none !important;
             border: 1px solid transparent !important;
-            height: 37px !important;
+            height: 37px;
         }
     }
+    
     .mat-mdc-form-field{
         width: 100%;
     }
@@ -31,19 +32,27 @@
         transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
         appearance: none;
         border-radius: $borderRadiusInput;
+        
+        ._pf-icon{
+            left: 0;
+        }
 
         .mdc-floating-label{display: none;} 
     }
-    .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input{ 
+    .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input,
+    .pf-text-input{ 
         color: $inputColor;
-        text-align: center;
-        font-size: 1.2rem;
+        text-align: left !important;
         font-weight: 300;
         background-color: $inputBg;
-        // @include pf-motion-mixin;
+        font-size: .9rem;
+        padding-left: 30px;
+        padding-right: 30px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         &:focus{
             color: $blue !important;
-            // background-color: #fff;
         }
     }
     .mat-mdc-input-element:enabled:hover, .mat-mdc-input-element:enabled:focus, input:not([type]):focus:not([readonly]){

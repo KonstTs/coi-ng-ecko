@@ -1,17 +1,30 @@
 <span class="pf-text-input-wrapper">
     <mat-form-field class="example-form-field">
         <!-- <mat-label>{{label}}</mat-label> -->
-        <input 
-            #matInput
-            matInput 
-            type="text" 
-            [(ngModel)]="value" 
-            [disabled]="disabled"
-            [placeholder]="placeholder"
-            [readonly]="readonly"
-            (keyup)="search($event)"
-            (blur)="blur();onBlur(this)"
-        >
+         <div class="pf-rel">
+          <span 
+            class="pf-icon pf-valign pf-abs-left pf-mrgl5 material-symbols-outlined" 
+            [style.color]="iconColor"
+            [style.fontSize]="iconSize"
+          >
+            {{iconClass}}
+          </span>
+          <input 
+              [ngClass]="{'pf-pdl30': iconClass, 'pf-text-input': true}"
+              #matInput
+              matInput 
+              type="text" 
+              [attr.class]="cssClass"
+              [(ngModel)]="value" 
+              [disabled]="disabled"
+              [placeholder]="placeholder"
+              [readonly]="readonly"
+              [required]="required ? 'required' : null"
+              (keyup)="search($event)"
+              (blur)="blur();onBlur(this)"
+          >
+         </div>
+         
         @if (value) {
           <button matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
             <mat-icon>x</mat-icon>

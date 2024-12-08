@@ -18,66 +18,67 @@ const PF_INPUT_BASE = { provide: PfInputBase, useExisting: forwardRef(() => PfTe
 
 @UntilDestroy()
 @Component({
-  selector: 'pf-text',
-  standalone: true,
-  imports: [MatIconModule, MatButtonModule, FormsModule, MatInputModule, MatFormFieldModule, MatLabel],
-  templateUrl: './text.component.html',
-  styleUrls: ['./text.component.scss'],
-  providers: [VALUE_ACCESSOR, PF_INPUT_BASE],
-  changeDetection: ChangeDetectionStrategy.OnPush
+	selector: 'pf-text',
+	standalone: true,
+	imports: [CommonModule, MatIconModule, MatButtonModule, FormsModule, MatInputModule, MatFormFieldModule, MatLabel],
+	templateUrl: './text.component.html',
+	styleUrls: ['./text.component.scss'],
+	providers: [VALUE_ACCESSOR, PF_INPUT_BASE],
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PfTextComponent extends PfInputBase implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor {
-    @ViewChild(NgModel) model: NgModel;
-    @ViewChild('matInput') input: MatInput;
-    static nextId = 0;
-    searchType = 'string';
+	@ViewChild(NgModel) model: NgModel;
+	@ViewChild('matInput') input: MatInput;
+	static nextId = 0;
+	searchType = 'string';
 
-  @HostBinding() id = `pf-text-${PfTextComponent.nextId++}`;
-  
-  @Input() clearable?: boolean;
-  @Input() disabled = false;
-  @Input() readonly = false;
-  @Input() tooltip?: string;
-  @Input() tooltipEvent = 'focus';
-  @Input() tooltipPosition = 'top';
-  @Input() iconClass = '';
-  @Input() iconSize?: string;
-  @Input() iconColor?: string;
-  @Input() styles?: any
-  @Input() searchFn$: (e: any) => Observable<any[]>;
-  @Input() blurFn: (e: any) => void;
-  @Input() searchQuerySize = 3;
+	@HostBinding() id = `pf-text-${PfTextComponent.nextId++}`;
 
-  constructor(injector: Injector) {
-    super(injector);
-  }
+	@Input() clearable?: boolean;
+	@Input() disabled = false;
+	@Input() readonly = false;
+	@Input() tooltip?: string;
+	@Input() tooltipEvent = 'focus';
+	@Input() tooltipPosition = 'top';
+	@Input() iconClass?: string;
+	@Input() iconSize?: string;
+	@Input() iconColor?: string;
+	@Input() styles?: any;
+	@Input() cssClass = '';
+	@Input() searchFn$: (e: any) => Observable<any[]>;
+	@Input() blurFn: (e: any) => void;
+	@Input() searchQuerySize = 3;
 
-  onBlur(self: PfTextComponent){
-    if(this.blurFn) this.blurFn(self)
-  }
- 
-  search(e: any){
-    if(this.searchFn$){
-      const count = e.target.value.length;
+	constructor(injector: Injector) {
+		super(injector);
+	}
 
-      let srchto = setTimeout(() => {
-        clearTimeout(srchto);
-        if(count === 0 || count >= this.searchQuerySize) this.searchFn$(e.target.value).pipe(take(1), untilDestroyed(this)).subscribe()
-      }, 400)
-    }
-  }
+	onBlur(self: PfTextComponent) {
+		if (this.blurFn) this.blurFn(self);
+	}
 
-  ngOnInit(): void {
-    super.ngOnInit();
-  }
+	search(e: any) {
+		if (this.searchFn$) {
+			const count = e.target.value.length;
 
-  ngAfterViewInit(): void {
-    super.ngAfterViewInit();
-  }
+			let srchto = setTimeout(() => {
+				clearTimeout(srchto);
+				if (count === 0 || count >= this.searchQuerySize) this.searchFn$(e.target.value).pipe(take(1), untilDestroyed(this)).subscribe();
+			}, 400);
+		}
+	}
 
-  ngOnDestroy(): void {
-    super.ngOnDestroy();
-  }
+	ngOnInit(): void {
+		super.ngOnInit();
+	}
+
+	ngAfterViewInit(): void {
+		super.ngAfterViewInit();
+	}
+
+	ngOnDestroy(): void {
+		super.ngOnDestroy();
+	}
 }
 
 
