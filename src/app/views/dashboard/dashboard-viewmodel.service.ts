@@ -22,43 +22,53 @@ export class PfDashboardViewModelService extends PfTableViewModelService<any> im
     protected override getItemCb = this.getItem.bind(this);
 
     barchart$ = new BehaviorSubject<any>([]);
+    topCoinsCount = 15;
 
     constructor(
+        injector: Injector,
         @Inject(PF_CELL_FORMATTER_TOKEN) public Renderer:IPfCellRenderer,
         @Inject(PF_TABLE_COLDEFS_TOKEN) public columns:IPfTableBaseColdef[],
         @Inject(PF_TABLE_FILTER_MODEL_TOKEN) public filters:PfDashBoardFilterModel,
         @Inject(forwardRef(() => PfCoingeckoService)) public apiSvc: PfCoingeckoService
     ){
-        super(columns, filters);
+        super(columns, filters, injector);
     }
 
-    private provideCellFormatted(_coin, _type:any, _value:any):string {
+    private provideCellFormatted(_coin, _type:any, _value:any, _i:number):string {
       const {name, image, symbol} = _coin;
       const {cells, defaultCellColor} = this.Renderer;
 
       if(!isNaN(_value)) return cells.currency(_value, `color:${{low_24h: '#ff451d', high_24h: '#619b48'}[_type] ?? defaultCellColor}`);
-      if(_type==='name') return `${cells.image(image, `<strong>${name}</strong>`)}`;
+      if(_type==='name') return cells.image(image, `<span style="color:#999">${_i+1}</span>`, `<strong>${name}</strong>`);
       if(_type==='symbol') return `<strong>${symbol.toUpperCase()}</strong>`;
       return _value;
     }
 
     private processReponse = (res:PfCoin[]):any => res
-       .map((coin:any) => Object.assign({}, ...(Object.keys(coin)
-       .map(k => ([...this.displayedColumns, 'image'].includes(k) && { [k]:this.provideCellFormatted(coin, k, coin[k]) }))
+       .map((coin:any, i) => Object.assign({}, ...(Object.keys(coin)
+       .map((k) => ([...this.displayedColumns, 'image'].includes(k) && { [k]:this.provideCellFormatted(coin, k, coin[k], i)}))
        .filter(coin => !!coin))))
 
     
 
     getRows(_query: any){
-        // return this.apiSvc.apiCoinsMarketGet(_query).pipe(switchMap((res:any) => of(this.processReponse(res))))
-      return of(dummy).pipe(
-            tap(res => {
-                const [d,v]=[[],[]];
-                for(let i=0;i<15;i++) (({name, market_cap} = res[i]) => (d.push(name), v.push(market_cap)))();
-                this.barchart$.next([d,v]);
-            }),
-            switchMap(d => of(this.processReponse(d)))
-        )
+        return this.apiSvc.apiCoinsMarketGet(_query)
+            .pipe(
+                tap(res => {
+                    const [d,v]=[[],[]];
+                    for (let i = 0; i < this.topCoinsCount; i++) (({ name, market_cap } = res[i]) => (d.push(name), v.push(market_cap)))();
+                    this.barchart$.next([d,v]);
+                }),
+                switchMap(d => of(this.processReponse(d)))
+            )
+        // return of(dummy).pipe(
+        //             tap(res => {
+        //                 const [d,v]=[[],[]];
+        //                 for (let i = 0; i < this.topCoinsCount; i++) (({ name, market_cap } = res[i]) => (d.push(name), v.push(market_cap)))();
+        //                 this.barchart$.next([d,v]);
+        //         }),
+        //             switchMap(d => of(this.processReponse(d)))
+        //         );
     }
 
     search(_term: string) {

@@ -23,8 +23,8 @@ export const PF_CELL_FORMATTER_TOKEN = new InjectionToken('PF_CELL_FORMATTER')
 
 export const PfCellRenderer = () => {
   const defaultCellColor = 'inherit';
-  const defaultCellBgColor = 'transparent';
- const defaultCellStyle = `color: ${defaultCellColor}; background: ${defaultCellBgColor}`;
+  const defaultCellBgColor = 'inherit';
+ const defaultCellStyle = `color: ${defaultCellColor}; background-color: ${defaultCellBgColor}`;
 
   const CurrencyFormatter = {
     value: null,
@@ -55,10 +55,11 @@ export const PfCellRenderer = () => {
   const cell = (_value,_style?) => `
      <span style="${_style??defaultCellStyle}">${_value}</span>
   `;
-  const cell_image = (_src, _value?) => `
+  const cell_image = (_src, _prepend='', _append='') => `
      <div class="pf-ai-center-flex">
+        <span class="pf-cell-image-prepended pf-mrgr10">${_prepend}</span>
         <img class="pf-cell-image pf-mrgr10" src="${_src}"/>
-        <span class="pf-cell-image-value">${_value}</span>
+        <span class="pf-cell-image-appended">${_append}</span>
       </div>
   `;
   
@@ -72,8 +73,9 @@ export const PfCellRenderer = () => {
   return new function(){
     this.CurrencyFormatter = CurrencyFormatter;
     this.cells = {
+      default: (v,s?) => cell(v,s),
       currency: (v,s?) => cell_currency(v,s),
-      image: (s, v?) => cell_image(s, v)
+      image: (s, p, a) => cell_image(s, p, a)
     }
     this.defaultCellColor = defaultCellColor;
     this.defaultCellBgColor = defaultCellBgColor;

@@ -1,10 +1,10 @@
 import { Inject, Injectable, Injector } from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
-import { PfBaseSearchModel } from '../../config/base-search-model';
-import { PfCoingeckoService } from '../../api/services/coins-services.service';
+import { PfBaseSearchModel } from '../config/base-search-model';
+import { PfCoingeckoService } from '../api/services/coins-services.service';
 import { tap } from 'rxjs/operators';
-import { PfBrowserCacheService } from '../services/browser-cache.service';
-import { SESSIONSTORAGE_CACHE_TOKEN } from '../../config/cache';
+import { PfBrowserCacheService } from './browser-cache.service';
+import { SESSIONSTORAGE_CACHE_TOKEN } from '../config/cache';
 
 @Injectable({
   providedIn: 'root'

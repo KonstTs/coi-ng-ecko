@@ -1,0 +1,35 @@
+<button
+     mat-button 
+     type="button"
+     [attr.class]="config?.styleClass"
+     [attr.style.color]="config?.color"
+     [attr.style.backgroundColor]="config?.bgColor"
+     [ngStyle]="config?.style"
+     [disabled]="!!config.disabled"
+     [ngClass]="{
+          'pf-rel': true,
+          'mat-raised-button': config?.raised,
+          'mat-icon-button': config?.raised,
+          'mat-flat-button': config?.flat,
+          'mat-stroked-button': config?.stroked,
+          'pf-motion-fast': true,
+          'mat-icon': config?.icon || icon,
+          'pf-button': true
+     }"
+>
+@if (icon) {
+     <!-- <mat-icon>icon</mat-icon> -->
+     <span 
+          class="pf-icon pf-valign pf-abs-left pf-mrgl5 material-symbols-outlined" 
+          [style.color]="config?.iconColor"
+          [style.fontSize]="config?.iconSize"
+     >
+          {{config?.icon || icon}}
+     </span>
+}
+</button>
+
+
+
+  <!-- [icon]="config?.icon || icon"
+  [iconPos]="config?.iconPos || 'left'" -->

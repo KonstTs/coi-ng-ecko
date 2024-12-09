@@ -6,14 +6,14 @@
 
   <table 
     #MatTable
-    [ngClass]="{'--zebra':stripe}" 
-    mat-table 
-    [dataSource]="VM.tableDataSource" 
+    mat-table
     matSort 
+    [ngClass]="{'--zebra':stripe}" 
     class="mat-elevation-z8 pf-table"
+    [dataSource]="VM.tableDataSource" 
   >
     @for (column of VM.columns; track column) {
-      <ng-container [matColumnDef]="column.columnDef">  
+      <ng-container [matColumnDef]="column.columnDef" [sticky]="column.sticky">  
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           {{column.header}}
         </th>
@@ -28,5 +28,5 @@
   </table>
 </div>
 @if(pagination){
-  <mat-paginator [pageSize]="pagesize" aria-label="Page"></mat-paginator>
+  <mat-paginator [pageSize]="pagesize" [class]="pagerClass" aria-label="Page"></mat-paginator>
 }

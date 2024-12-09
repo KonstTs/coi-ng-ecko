@@ -22,6 +22,14 @@ h1,h2,h3,h4,h5,h6{
   color: $blue;
   font-weight: 500;
 }
+button{
+  color: inherit;
+  width: 40px;
+  height: 40px;
+  background: none;
+  outline: none;
+  border: none;
+}
 .cdk-overlay-connected-position-bounding-box{
   position: absolute;
 
@@ -40,3 +48,37 @@ h1,h2,h3,h4,h5,h6{
   background-color: $inputBg !important;
   color: $inputColor !important;
 }
+._descr{
+  font-weight: 300;
+  font-size: 1.4rem;
+  color: #a7a7a7;
+  padding-left: 4px;
+}
+.pf-root-color{
+  color: $inputColor
+}
+.pf-dialog-backdrop{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.cdk-global-overlay-wrapper{
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.cdk-global-overlay-wrapper{
+  justify-items: flex-end;
+  align-items: flex-start;
+}
+    

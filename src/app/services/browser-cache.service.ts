@@ -1,5 +1,5 @@
 import { Observable, of } from 'rxjs';
-import { PfCacheService } from '../../config/cache';
+import { PfCacheService } from '../config/cache';
 
 export class PfBrowserCacheService implements PfCacheService {
   constructor(private _storage: Storage) {}

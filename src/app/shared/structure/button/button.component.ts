@@ -1,72 +1,52 @@
-// import { CommonModule } from '@angular/common';
-// import { Component, HostBinding, Input, NgModule } from '@angular/core';
-// import { Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { Component, HostBinding, Input } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { Observable } from 'rxjs';
 
-// export type PfButtonSeverity = 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
-// ``;
-// export interface PfButtonConfig {
-// 	id?: string;
-// 	label?: string;
-// 	color?: string;
-// 	active?: boolean;
-// 	activeColor?: string;
-// 	severity?: PfButtonSeverity;
-// 	textOnly?: boolean;
-// 	icon?: string;
-// 	iconPos?: string;
-// 	styleClass?: string;
-// 	hostClass?: string;
-// 	raised?: boolean;
-// 	rounded?: boolean;
-// 	outline?: boolean;
-// 	small?: boolean;
-// 	large?: boolean;
-// 	disabled?: boolean;
-// 	style?: any;
-// 	fragment?: string;
-// 	disable?: () => boolean;
-// 	visible?: () => boolean;
-// 	command?: (...args) => void;
-// 	command$?: (...args) => Observable<any>;
-// }
+export interface PfButtonConfig {
+	id?: string;
+	label?: string;
+	color?: string;
+	bgColor?: string;
+	styleClass?: string;
+	raised?: boolean;
+	flat?: boolean;
+	stroked?: boolean;
+	icon?: string;
+	iconSet?: PfButtonIconSet[];
+	iconColor?: string;
+	iconSize?: string;
+	active?: boolean;
+	activeColor?: string;
+	hostClass?: string;
+	disabled?: boolean;
+	style?: any;
+	disable?: () => boolean;
+	visible?: () => boolean;
+	command?: (...args) => void;
+	command$?: (...args) => Observable<any>;
+}
 
-// @Component({
-// 	selector: 'lm-button',
-// 	templateUrl: './button.component.html',
-// 	styles: [
-// 		`
-// 			:host button {
-// 				border: none;
-// 			}
-// 			:host ::ng-deep .p-button.p-button-text:enabled:hover {
-// 				background: none !important;
-// 			}
-// 		`
-// 	]
-// })
-// export class LMButtonComponent {
-// 	@Input() config?: PfButtonConfig;
-// 	@Input() label: string;
-// 	@Input() icon: string;
-// 	@Input() pInitEditableRow;
-// 	@Input() pSaveEditableRow;
-// 	@Input() pCancelEditableRow;
+export type PfButtonIconSet = { name: string; value:string, active:boolean}
 
-// 	@HostBinding('style.pointer-events') get events(): string {
-// 		if (this.config?.disabled) return 'none';
-// 		return 'auto';
-// 	}
+@Component({
+     selector: 'pf-button',
+     standalone: true,
+     imports:[CommonModule, MatIconButton, MatIcon],
+     templateUrl: './button.component.html',
+     styles: []
+})
+export class PfButtonComponent {
+	@Input() config?: PfButtonConfig;
+	@Input() label: string;
+	@Input() icon: string;
 
-// 	@HostBinding('style.color') get style() {
-// 		return this.config?.color ?? 'inherit';
-// 	}
+	@HostBinding('style.pointer-events') get events(): string {
+		if (this.config?.disabled) return 'none';
+		return 'auto';
+	}
 
-// 	constructor() {}
-// }
-
-// @NgModule({
-// 	imports: [CommonModule, ButtonModule, RippleModule],
-// 	exports: [LMButtonComponent, ButtonModule],
-// 	declarations: [LMButtonComponent]
-// })
-// export class PfButtonModule {}
+	constructor() {}
+}

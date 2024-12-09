@@ -14,6 +14,7 @@ import { TrustHTMLPipe } from '../../directives/html-sanitizer.directive';
 export interface IPfTableBaseColdef {
     columnDef: string;
     header: string;
+    sticky?: boolean;
     cell: (item: any) => TemplateRef<unknown> | string | any;
 }
 
@@ -37,7 +38,6 @@ export interface IPfTableRowAction {
 })
 export class PfTableComponent implements OnInit, OnDestroy, AfterViewInit {
     static nextId = 0;
-
     
     @HostBinding() id = `pf-table-${PfTableComponent.nextId++}`;
     @ViewChild('MatTable') MatTable: any;
@@ -53,6 +53,7 @@ export class PfTableComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() pagesize = 250;
     @Input() pageSizeOptions = [100, 150, 200, 250];
     @Input() totalsCount = false;
+    @Input() pagerClass: string
     
     @Input() searchable = true;
     @Input() sortable: boolean;
@@ -85,12 +86,15 @@ export class PfTableComponent implements OnInit, OnDestroy, AfterViewInit {
       this.VM.ngOnInit()
     }
 
-    ngAfterViewInit(): void {
-      this.VM.tableDataSource.sort = this.sort;
-      this.VM.tableDataSource.paginator = this.paginator;
-      this.paginator.page.pipe(
-        tap(res => console.log('res:', res))
-      ).subscribe()
+  ngAfterViewInit(): void {
+    if (this.VM.tableDataSource) { 
+        this.VM.tableDataSource.sort = this.sort;
+        this.VM.tableDataSource.paginator = this.paginator;
+        this.paginator.page.pipe(
+          tap(res => console.log('res:', res))
+        ).subscribe()
+    }
+      
     }
 
     ngOnDestroy(): void {

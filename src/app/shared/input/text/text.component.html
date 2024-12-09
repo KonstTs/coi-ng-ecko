@@ -1,14 +1,15 @@
 <span class="pf-text-input-wrapper">
     <mat-form-field class="example-form-field">
-        <!-- <mat-label>{{label}}</mat-label> -->
          <div class="pf-rel">
-          <span 
-            class="pf-icon pf-valign pf-abs-left pf-mrgl5 material-symbols-outlined" 
-            [style.color]="iconColor"
-            [style.fontSize]="iconSize"
-          >
-            {{iconClass}}
-          </span>
+          @if (iconClass) {
+            <span 
+              class="pf-icon pf-valign pf-abs-left pf-mrgl5 material-symbols-outlined" 
+              [style.color]="iconColor"
+              [style.fontSize]="iconSize"
+            >
+              {{iconClass}}
+            </span>
+          }
           <input 
               [ngClass]="{'pf-pdl30': iconClass, 'pf-text-input': true}"
               #matInput

@@ -8,6 +8,7 @@ import { mergeObjects } from '../../utils';
 import { IPfTableBaseColdef } from './table.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { IPfPaginationModel, PfFilterModel } from '../../../config/filter-defs';
+import { PfNotificationService } from '../../../services/notification.service';
 
 export const PF_TABLE_COLDEFS_TOKEN = new InjectionToken<IPfTableBaseColdef[]>('PF_TABLE_COLDEFS');
 
@@ -27,7 +28,7 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
     protected abstract getRowsCb(_query: any): Observable<TModel[]>;
     protected abstract searchCb(_term:string): Observable<TModel[]>;
     protected abstract getItemCb(_id:string): Observable<TModel>;
-    // protected notificationSvc: PfNotificationService;
+    protected notificationSvc: PfNotificationService;
     protected _isBusy$ = new Subject<boolean>();
 
     protected emitIsBusy(isBusy: boolean): void {
@@ -37,28 +38,28 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
       return this._isBusy$.asObservable();
     }
 
-    constructor(_columns: IPfTableBaseColdef[], _filters: PfFilterModel<any>) 
+    constructor(_columns: IPfTableBaseColdef[], _filters: PfFilterModel<any>, protected injector: Injector,) 
     {
       this.columns = _columns;
       this.displayedColumns = this.columns.map(({columnDef}) => columnDef);
       this.filterModel = mergeObjects(this.baseFilterModel, _filters ?? {});
-
-      // this.notificationSvc = injector.get<PfNotificationService>(PfNotificationService);
+      this.notificationSvc = injector.get<PfNotificationService>(PfNotificationService);
     }
 
     getRows$(_query?: any){
         return of(null).pipe(
             tap(() => this.emitIsBusy(true)),
-            switchMap(() => this.getRowsCb(_query)),
-            tap((res) => {
-                this.model = res;
-                this.tableDataSource = new MatTableDataSource(this.model);
-                this.source$.next(this.tableDataSource)
-            }),
-            catchError(error => {
-                this.handleError$(error);
-                throw error;
-            }),
+          switchMap(() => this.getRowsCb(_query)),
+          catchError(error => {
+            this.handleError$(error);
+            throw error;
+          }),
+          tap((res) => {
+              this.model = res;
+              this.tableDataSource = new MatTableDataSource(this.model);
+              this.source$.next(this.tableDataSource)
+          }),
+            
             untilDestroyed(this),
             finalize(() => {
                 this.emitIsBusy(false);
@@ -99,9 +100,10 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
 
  
     handleError$(error: HttpErrorResponse): void {
-        console.log('error:', error)
-      //const message = err.error.Message || err.error.title;
-      //this.notificationSvc.showError(I18N.common.unhandledError, 'ERROR');
+        
+      const message = error.error.Message || error.error.title;
+      this.notificationSvc.alert(message)
+      // showError(I18N.common.unhandledError, 'ERROR');
     }
 
     ngOnInit(): void {

@@ -66,11 +66,15 @@
         tr,td{
             border-top: none;
             border-bottom: none;
+            background-color: #f1f1f1;
         }
         
         &.--zebra{
             tr:nth-of-type(odd) {
                 background-color: #e7e7e7;
+                td{
+                    background-color: #e7e7e7;
+                }
               }
         }
         
