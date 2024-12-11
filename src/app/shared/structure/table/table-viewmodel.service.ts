@@ -57,7 +57,7 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
           tap((res) => {
               this.model = res;
               this.tableDataSource = new MatTableDataSource(this.model);
-              this.source$.next(this.tableDataSource)
+              this.source$.next(this.tableDataSource);
           }),
             
             untilDestroyed(this),
@@ -100,14 +100,12 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
 
  
     handleError$(error: HttpErrorResponse): void {
-        
-      const message = error.error.Message || error.error.title;
-      this.notificationSvc.alert(message)
-      // showError(I18N.common.unhandledError, 'ERROR');
+      // handel message and provide strings;
+      this.notificationSvc.alert({title:'Bummer', severity: 'error'})
     }
 
     ngOnInit(): void {
-        this.getRows$({}).subscribe()
+      this.getRows$({}).subscribe();
     }
 
     ngOnDestroy(): void {

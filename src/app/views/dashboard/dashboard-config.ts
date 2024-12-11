@@ -66,184 +66,31 @@ export const DASHBOARD_CONFIG = {
       })),
 
 
-  provideChartData: ([d, v]: [[], []], vm: PfDashboardViewModelService):any => {
+  provideChartData: ([d, v]: [[], []], vm: PfDashboardViewModelService): any => {
     const { Renderer: { CurrencyFormatter: { formatWithOptions } } } = vm;
+    const fo = { maximumFractionDigits: 2, notation: 'compact' };
+    const clr = v.map(_ => `#${colorme()}`)
+    const stacks = d.map((dt, i) => ({ name: dt, type: 'bar', stack: 'total', label: { show: false }, data:[{ value: v[i], itemStyle: { color: clr[i] } }] }))
+    
     return {
       bar: {
         xAxis: { data: d },
         yAxis: {
           axisLabel: {
-            formatter: (d) => formatWithOptions(d, { maximumFractionDigits: 2, notation: 'compact' }).value
+            formatter: (d) => formatWithOptions(d, fo).value
           }
         },
         series: [{
           name: 'Market Cap',
           type: 'bar',
           itemStyle: { borderRadius: [50, 50, 0, 0] },
-          data: v?.map((val) => ({ value: val, itemStyle: { color: `#${colorme()}` } }))
+          data: v?.map((val,i) => ({ value: val, itemStyle: { color: clr[i] } }))
         }]
       },
-      stack: {     
-          height:50,
-          yAxis: {
-            type: 'category',
-            data: ['Market Cap']
-          },
-          series: [
-            {
-              name: 'Direct',
-              type: 'bar',
-              stack: 'total',
-              label: {
-                show: true
-              },
-              emphasis: {
-                focus: 'series'
-              },
-              data: [{value:320}]
-            },
-            {
-              name: 'Mail Ad',
-              type: 'bar',
-              stack: 'total',
-              label: {
-                show: true
-              },
-              emphasis: {
-                focus: 'series'
-              },
-              data: [{value:120}]
-            },
-            {
-              name: 'Affiliate Ad',
-              type: 'bar',
-              stack: 'total',
-              label: {
-                show: true
-              },
-              emphasis: {
-                focus: 'series'
-              },
-              data: [{value:220}]
-            },
-            {
-              name: 'Video Ad',
-              type: 'bar',
-              stack: 'total',
-              label: {
-                show: true
-              },
-              emphasis: {
-                focus: 'series'
-              },
-              data: [{value:150}]
-            },
-            {
-              name: 'Search Engine',
-              type: 'bar',
-              stack: 'total',
-              label: {
-                show: true
-              },
-              emphasis: {
-                focus: 'series'
-              },
-              data: [{value:820}]
-            }
-          ]
-        }      
+      stack: {
+        series: stacks,
+        focus: 'series'
+      }
     }
   }
-
 }
-
-/*
-option = {
-  height:50,
-  tooltip: {
-    trigger: 'axis',
-    axisPointer: {
-      // Use axis to trigger tooltip
-      type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
-    }
-  },
-  legend: {},
-  grid: {
-    left: '3%',
-    right: '4%',
-    bottom: '3%',
-    containLabel: true,
-    // borderWidth:0,
-    
-  },
-  xAxis: {
-    type: 'value'
-  },
-  yAxis: {
-    type: 'category',
-    data: ['Market Cap']
-  },
-  series: [
-    {
-      name: 'Direct',
-      type: 'bar',
-      stack: 'total',
-      label: {
-        show: true
-      },
-      emphasis: {
-        focus: 'series'
-      },
-      data: [{value:320}]
-    },
-    {
-      name: 'Mail Ad',
-      type: 'bar',
-      stack: 'total',
-      label: {
-        show: true
-      },
-      emphasis: {
-        focus: 'series'
-      },
-      data: [{value:120}]
-    },
-    {
-      name: 'Affiliate Ad',
-      type: 'bar',
-      stack: 'total',
-      label: {
-        show: true
-      },
-      emphasis: {
-        focus: 'series'
-      },
-      data: [{value:220}]
-    },
-    {
-      name: 'Video Ad',
-      type: 'bar',
-      stack: 'total',
-      label: {
-        show: true
-      },
-      emphasis: {
-        focus: 'series'
-      },
-      data: [{value:150}]
-    },
-    {
-      name: 'Search Engine',
-      type: 'bar',
-      stack: 'total',
-      label: {
-        show: true
-      },
-      emphasis: {
-        focus: 'series'
-      },
-      data: [{value:820}]
-    }
-  ]
-};
-*/

@@ -6,7 +6,7 @@ import { GridComponent, LegendComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import { ECharts, EChartsCoreOption } from 'echarts';
 import { CommonModule } from '@angular/common';
-import { PF_CHART_OPTIONS } from '../../../config/chart-base-options';
+import { PF_CHART_OPTIONS, PF_STACK_CHART_OPTIONS } from '../../../config/chart-base-options';
 import { TooltipComponent } from 'echarts/components';
 import { getElement } from '../../utils';
 echarts.use([BarChart, LineChart, PieChart, GridComponent, TooltipComponent, LegendComponent, CanvasRenderer]);
@@ -20,7 +20,7 @@ export type PfChartDataType = {
   selector: 'pf-stack-chart',
   standalone: true,
   imports: [CommonModule, NgxEchartsDirective],
-  styles: [':host{display:flex;align-items:center;justify-content:center;width:100%}'],
+  styles: [':host{width:100%}'],
   providers: [provideEchartsCore({ echarts })],
   template: `
     <div class="pf-chart-wrapper" [style.width]="width" [style.height]="height">
@@ -31,15 +31,13 @@ export type PfChartDataType = {
 export class PfStackChartComponent implements OnInit, AfterViewInit, OnDestroy {
   static nextId = 0;
   @HostBinding() id = `pf-stack-chart-${PfStackChartComponent.nextId++}`;
-  @ViewChild('chart')
   chart: ECharts;
   instance: ECharts;
-  resizer: ResizeObserver;
 
   @Input() sizer: string;
-  @Input() width = '0';
-  @Input() height = '0';
-  @Input() initOptions = { renderer: 'svg', width: 0 , height: 0 };
+  @Input() width = '50%';
+  @Input() height = '30px';
+  @Input() initOptions = { renderer: 'svg', width: 500 , height: 30 };
   @Input() options?: EChartsCoreOption;
   @Input() merge?: EChartsCoreOption;
 
@@ -48,7 +46,7 @@ export class PfStackChartComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   constructor() {
-    this.options = PF_CHART_OPTIONS;
+    this.options = PF_STACK_CHART_OPTIONS;
   }
 
   ngOnInit(): void {}
@@ -56,15 +54,14 @@ export class PfStackChartComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     // this.resizer = new ResizeObserver((oens) => {
     //   for (let oen of oens) {
-    //     const { contentRect: { width, height } } = oen;
-        
-    //     setTimeout((_) => this.instance.resize({ width: Math.floor(width), height: Math.floor(height) }), 300);
+    //     const { contentRect: { width } } = oen;
+    //     setTimeout((_) => this.instance.resize({ width: Math.floor(width)}), 300);
     //   }
     // });
     // this.resizer.observe(getElement(this.sizer ?? `#${this.id}`));
     // setTimeout((_) => (this.width = '100%'), 100);
   }
   ngOnDestroy(): void {
-    this.resizer.disconnect();
+    // this.resizer.disconnect();
   }
 }

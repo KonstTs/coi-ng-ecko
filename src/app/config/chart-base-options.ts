@@ -13,17 +13,21 @@ export const PF_CHART_OPTIONS: EChartsCoreOption = {
 };
 
 export const PF_STACK_CHART_OPTIONS: EChartsCoreOption = {
-  textStyle: {fontFamily: 'Roboto'},
-  legend: {},
-  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-  grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-  yAxis: { type: 'category'},
+  textStyle: { fontFamily: 'Roboto' },
+  legend: {show: false},
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {type: 'shadow'}},
+  grid: {
+    top: '-1%',
+    left: '-1%',
+    right: '-1%',
+    bottom: '-1%',
+    containLabel: false
+  },
+  yAxis: { type: 'category', label: { show: false }, data:[''] },
   xAxis: { type: 'value'},
   series: [],
   animationEasing: 'elasticOut'
 };
   
-
-// formatter: function(d) {
-//         return d.name + ' ' + d.data;
-//       }

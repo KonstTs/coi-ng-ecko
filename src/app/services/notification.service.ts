@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
-import { PfAlertComponent, PfConfirmComponent } from '../shared/dialog/dialog.component';
+import { PfAlertComponent } from '../shared/dialog/dialog.component';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { PF_DEFAULT_DIALOG_CONFIG, PfDialogMsg } from '../config/base-notification';
+import { PF_DEFAULT_DIALOG_CONFIG, PfDialogConfig, PfDialogMsg, PfSeverity } from '../config/base-notification';
 import { mergeObjects } from '../shared/utils';
 
 
@@ -13,13 +13,15 @@ export class PfNotificationService {
 
      constructor(private dialog: MatDialog, protected Injector: Injector) { }
 
-     alert(msg: PfDialogMsg, config: MatDialogConfig = {}) {
-          // const dialogRef: MatDialogRef<PfAlertComponent> =
-          console.log('this._defaultOptions', this._defaultOptions)
-          return this.dialog.open(PfAlertComponent, { ...this_defaultOptions, config, data: msg });
+     alert(message:PfDialogMsg, config: PfDialogConfig = {}) {
+          const ref = this.dialog.open(
+               PfAlertComponent, {
+                    ...mergeObjects(this._defaultOptions, config), data: {
+                         body: message.body, title: message.title, severity: message.severity
+                    }
+               }
+          );
+          ref.afterClosed().subscribe(_=> console.log('do sth nice'))
      }
 
-     confirm(msg: PfDialogMsg, config: MatDialogConfig = {}) {
-          return this.dialog.open(PfConfirmComponent, { ...mergeObjects(this._defaultOptions, config), data: msg });
-     }
 }

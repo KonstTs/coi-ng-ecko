@@ -52,23 +52,23 @@ export class PfDashboardViewModelService extends PfTableViewModelService<any> im
     
 
     getRows(_query: any){
-        return this.apiSvc.apiCoinsMarketGet(_query)
-            .pipe(
-                tap(res => {
-                    const [d,v]=[[],[]];
-                    for (let i = 0; i < this.topCoinsCount; i++) (({ name, market_cap } = res[i]) => (d.push(name), v.push(market_cap)))();
-                    this.barchart$.next([d,v]);
-                }),
-                switchMap(d => of(this.processReponse(d)))
-            )
-        // return of(dummy).pipe(
-        //             tap(res => {
-        //                 const [d,v]=[[],[]];
-        //                 for (let i = 0; i < this.topCoinsCount; i++) (({ name, market_cap } = res[i]) => (d.push(name), v.push(market_cap)))();
-        //                 this.barchart$.next([d,v]);
+        // return this.apiSvc.apiCoinsMarketGet(_query)
+        //     .pipe(
+        //         tap(res => {
+        //             const [d,v]=[[],[]];
+        //             for (let i = 0; i < this.topCoinsCount; i++) (({ name, market_cap } = res[i]) => (d.push(name), v.push(market_cap)))();
+        //             this.barchart$.next([d,v]);
         //         }),
-        //             switchMap(d => of(this.processReponse(d)))
-        //         );
+        //         switchMap(d => of(this.processReponse(d)))
+        //     )
+        return of(dummy).pipe(
+                    tap(res => {
+                        const [d,v]=[[],[]];
+                        for (let i = 0; i < this.topCoinsCount; i++) (({ name, market_cap } = res[i]) => (d.push(name), v.push(market_cap)))();
+                        this.barchart$.next([d,v]);
+                }),
+                    switchMap(d => of(this.processReponse(d)))
+                );
     }
 
     search(_term: string) {

@@ -51,7 +51,6 @@ export class PfChartComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   constructor() {
-    // this.options = structuredClone(PF_CHART_OPTIONS);
     this.options = PF_CHART_OPTIONS;
   }
 

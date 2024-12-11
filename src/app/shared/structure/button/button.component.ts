@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 
 export interface PfButtonConfig {
 	id?: string;
+	default?: boolean;
 	label?: string;
 	color?: string;
 	bgColor?: string;
@@ -36,7 +37,12 @@ export type PfButtonIconSet = { name: string; value:string, active:boolean}
      standalone: true,
      imports:[CommonModule, MatIconButton, MatIcon],
      templateUrl: './button.component.html',
-     styles: []
+	styles: [`
+		:host{display: inline-block;}
+		:host.--default{ padding: 5px; background: #4285f4; color: #fff; border-radius: 20px;}
+		.pf-btn-icon{font-size: 1.2rem;}
+		.pf-btn-txt{padding-left:25px;padding-right:10px;font-size:.9rem}
+	`]
 })
 export class PfButtonComponent {
 	@Input() config?: PfButtonConfig;
@@ -46,6 +52,10 @@ export class PfButtonComponent {
 	@HostBinding('style.pointer-events') get events(): string {
 		if (this.config?.disabled) return 'none';
 		return 'auto';
+	}
+	@HostBinding('class.--default') get _() {
+		if (this.config?.default) return '--default';
+		return '';
 	}
 
 	constructor() {}

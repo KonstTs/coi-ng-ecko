@@ -1,8 +1,8 @@
 import { Type, Injector } from "@angular/core";
-import { DialogPosition, MatDialogConfig } from "@angular/material/dialog";
+import { MatDialogConfig } from "@angular/material/dialog";
 
-export type PfSeverity = 'success' | 'info' | 'warn' | 'error';
-export type PfDialogMsg = {title:string, body:string};
+export type PfSeverity = 'success' | 'info' | 'warning' | 'error';
+export type PfDialogMsg = {title?:string, body?:string, severity?:PfSeverity};
 
 export class PfNotificationContext<T> {
   constructor(public id: string) {}
@@ -10,13 +10,17 @@ export class PfNotificationContext<T> {
   data: T;
 }
 
-export const PF_DEFAULT_DIALOG_CONFIG: MatDialogConfig = {
+export interface PfDialogConfig extends MatDialogConfig { severity?:PfSeverity}
+
+export const PF_DEFAULT_DIALOG_CONFIG: MatDialogConfig<PfDialogConfig> = {
   position: { top: '60px', right: '60px' },
   hasBackdrop: true,
   backdropClass: 'pf-dialog-backdrop',
   panelClass: 'pf-dialog-panel-class',
-  width: '160px',
-  height: '120px',
+  minWidth: '160px',
+  minHeight: '120px',
+  maxHeight: '300px',
+  maxWidth: '400px'
 }
 
 

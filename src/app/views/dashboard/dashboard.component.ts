@@ -101,6 +101,7 @@ import { PfNotificationService } from '../../services/notification.service';
 					[titleIcon]="'bar_chart_4_bars'"
 					[actions]="chartActions"
 					[headerClass]="'--bg-blue'"
+					[stackData]="stackData"
 				></pf-chart-widget-header>
 
 				<div class="_charts pf-motion pf-animation-fade-in">
