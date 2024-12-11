@@ -98,7 +98,7 @@
         z-index: 1;
         &::ng-deep{
             .pf-header-stacked-chart{
-                // visibility: hidden;
+                visibility: hidden;
             }
         }
         
@@ -129,6 +129,9 @@
                     }
                     .--text-white, .pf-icon{
                         color: $white !important;
+                    }
+                    .pf-header-stacked-chart{
+                        visibility: visible;
                     }
                 }
                 ._charts{

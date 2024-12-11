@@ -21,6 +21,7 @@ import { PfTextComponent } from '../../shared/input/text/text.component';
 import { PfButtonConfig } from '../../shared/structure/button/button.component';
 import { PfChartWidgetHeaderComponent } from './dashboard-chart-widget-header.component';
 import { PfNotificationService } from '../../services/notification.service';
+import { PfBrowserCacheService } from '../../services/browser-cache.service';
 
 @Component({
 	standalone: true,
@@ -88,7 +89,7 @@ import { PfNotificationService } from '../../services/notification.service';
 					[filterable]="true" 
 					[sticky]="true" 
 					[pagination]="true"
-					[pagesize]="250"
+					[pagesize]="50"
 					[pagerClass]="'--not-max'"
 				></pf-table>
 
@@ -170,7 +171,7 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 	ngOnInit(): void {}
 
 	ngAfterViewInit(): void {
-		// setTimeout((_) => this.PFChart?.instance.resize());
+		// this.PfTable.paginator.nextPage()
 	}
 
 	ngOnDestroy(): void {}

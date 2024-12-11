@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Directive, InjectionToken, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Directive, Inject, InjectionToken, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
 import { PfBaseEntity } from '../../../config/base-entity';
 import { mergeObjects } from '../../utils';
@@ -9,6 +9,8 @@ import { IPfTableBaseColdef } from './table.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { IPfPaginationModel, PfFilterModel } from '../../../config/filter-defs';
 import { PfNotificationService } from '../../../services/notification.service';
+import { SESSIONSTORAGE_CACHE, SESSIONSTORAGE_CACHE_TOKEN } from '../../../config/cache';
+import { PfBrowserCacheService } from '../../../services/browser-cache.service';
 
 export const PF_TABLE_COLDEFS_TOKEN = new InjectionToken<IPfTableBaseColdef[]>('PF_TABLE_COLDEFS');
 
@@ -17,18 +19,19 @@ export const PF_TABLE_COLDEFS_TOKEN = new InjectionToken<IPfTableBaseColdef[]>('
 @Directive()
 export abstract class PfTableViewModelService<TModel extends PfBaseEntity> implements OnInit, OnDestroy {
     model: TModel[];
-    tableDataSource: MatTableDataSource<TModel>
-    source$ = new Subject<MatTableDataSource<TModel>>();
+    tableDataSource = new MatTableDataSource<TModel>([])
+    source$ = new BehaviorSubject<MatTableDataSource<TModel>>(this.tableDataSource);
     
     columns: IPfTableBaseColdef[];
     displayedColumns: string[];
-    baseFilterModel: IPfPaginationModel = {page: 1, per_page: 250}
-    filterModel: PfFilterModel<any>
+    baseFilterModel: IPfPaginationModel = {page: 1, per_page: 50}
+    filterModel: PfFilterModel<any>;
+    totalEntries: number;
     
     protected abstract getRowsCb(_query: any): Observable<TModel[]>;
     protected abstract searchCb(_term:string): Observable<TModel[]>;
     protected abstract getItemCb(_id:string): Observable<TModel>;
-    protected notificationSvc: PfNotificationService;
+  protected notificationSvc: PfNotificationService;
     protected _isBusy$ = new Subject<boolean>();
 
     protected emitIsBusy(isBusy: boolean): void {
@@ -38,13 +41,18 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
       return this._isBusy$.asObservable();
     }
 
-    constructor(_columns: IPfTableBaseColdef[], _filters: PfFilterModel<any>, protected injector: Injector,) 
+  constructor(
+    _columns: IPfTableBaseColdef[],
+    _filters: PfFilterModel<any>,
+    protected injector: Injector,
+  ) 
     {
       this.columns = _columns;
       this.displayedColumns = this.columns.map(({columnDef}) => columnDef);
       this.filterModel = mergeObjects(this.baseFilterModel, _filters ?? {});
       this.notificationSvc = injector.get<PfNotificationService>(PfNotificationService);
-    }
+  }
+
 
     getRows$(_query?: any){
         return of(null).pipe(
@@ -100,12 +108,12 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
 
  
     handleError$(error: HttpErrorResponse): void {
-      // handel message and provide strings;
+      // handle message and provide strings;
       this.notificationSvc.alert({title:'Bummer', severity: 'error'})
     }
 
     ngOnInit(): void {
-      this.getRows$({}).subscribe();
+      // this.getRows$(this.filterModel).subscribe();
     }
 
     ngOnDestroy(): void {

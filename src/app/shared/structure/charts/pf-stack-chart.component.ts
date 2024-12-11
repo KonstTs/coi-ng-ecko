@@ -1,4 +1,4 @@
-import {  OnInit, AfterViewInit, OnDestroy, Input, ViewChild, Component, HostBinding, Host } from '@angular/core';
+import {  OnInit, AfterViewInit, OnDestroy, Input, Component, HostBinding } from '@angular/core';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import * as echarts from 'echarts/core';
 import { BarChart, LineChart, PieChart } from 'echarts/charts';
@@ -6,9 +6,8 @@ import { GridComponent, LegendComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import { ECharts, EChartsCoreOption } from 'echarts';
 import { CommonModule } from '@angular/common';
-import { PF_CHART_OPTIONS, PF_STACK_CHART_OPTIONS } from '../../../config/chart-base-options';
+import { PF_STACK_CHART_OPTIONS } from '../../../config/chart-base-options';
 import { TooltipComponent } from 'echarts/components';
-import { getElement } from '../../utils';
 echarts.use([BarChart, LineChart, PieChart, GridComponent, TooltipComponent, LegendComponent, CanvasRenderer]);
 
 export type PfChartDataType = {
@@ -35,7 +34,7 @@ export class PfStackChartComponent implements OnInit, AfterViewInit, OnDestroy {
   instance: ECharts;
 
   @Input() sizer: string;
-  @Input() width = '50%';
+  @Input() width = '100%';
   @Input() height = '30px';
   @Input() initOptions = { renderer: 'svg', width: 500 , height: 30 };
   @Input() options?: EChartsCoreOption;
@@ -52,16 +51,7 @@ export class PfStackChartComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    // this.resizer = new ResizeObserver((oens) => {
-    //   for (let oen of oens) {
-    //     const { contentRect: { width } } = oen;
-    //     setTimeout((_) => this.instance.resize({ width: Math.floor(width)}), 300);
-    //   }
-    // });
-    // this.resizer.observe(getElement(this.sizer ?? `#${this.id}`));
-    // setTimeout((_) => (this.width = '100%'), 100);
   }
   ngOnDestroy(): void {
-    // this.resizer.disconnect();
   }
 }

@@ -69,8 +69,8 @@ export const DASHBOARD_CONFIG = {
   provideChartData: ([d, v]: [[], []], vm: PfDashboardViewModelService): any => {
     const { Renderer: { CurrencyFormatter: { formatWithOptions } } } = vm;
     const fo = { maximumFractionDigits: 2, notation: 'compact' };
-    const clr = v.map(_ => `#${colorme()}`)
-    const stacks = d.map((dt, i) => ({ name: dt, type: 'bar', stack: 'total', label: { show: false }, data:[{ value: v[i], itemStyle: { color: clr[i] } }] }))
+    const clr = v?.map(_ => `#${colorme()}`)
+    const stacks = d?.map((dt, i) => ({ name: dt, type: 'bar', stack: 'total', label: { show: false }, data:[{ value: v[i], itemStyle: { color: clr[i] } }] }))
     
     return {
       bar: {

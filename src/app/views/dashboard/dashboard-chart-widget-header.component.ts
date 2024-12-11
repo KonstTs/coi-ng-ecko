@@ -34,7 +34,10 @@ import { getElement } from '../../shared/utils';
     styleUrls: ['../../views/dashboard/dashboard.component.scss'],
     styles:[`
         :host ::ng-deep button:enabled:active{background: none !important}
-        .pf-header-stacked-chart{width: 50%; background: #ffF; border-radius: 22px; overflow: hidden; height: 20px;}
+        .pf-header-stacked-chart{
+            width: 50%; background: rgba(255,255,255,.4); border-radius: 22px; overflow: hidden; height: 20px;
+            border-left:3px solid rgba(255,255,255,.1);border-right:3px solid rgba(255,255,255,.1)
+        }
         
     `]
 })
