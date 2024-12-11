@@ -23,4 +23,15 @@
     
   </table>
 </div>
-  <mat-paginator (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()" [pageSize]="pagesize" [length]="VM.totalEntries"  [class]="pagerClass" aria-label="Page"></mat-paginator>
+  <div class="pf-paginator-wrapper">
+    <div class="pf-overlay-white" [ngClass]="{'pf-display-none': !loading}"></div>
+    <mat-paginator 
+      [pageSize]="pagesize" 
+      [length]="VM.totalEntries"  
+      [class]="pagerClass" aria-label="Page"
+      [ariaBusy]="VM.isBusy$ | async"
+      (mouseenter)="onMouseEnter()" 
+      (mouseleave)="onMouseLeave()" 
+  ></mat-paginator>
+  </div>
+  

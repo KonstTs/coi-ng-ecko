@@ -7,7 +7,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { DataSource } from '@angular/cdk/collections';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput, MatInputModule } from '@angular/material/input';
-import { debounceTime, distinctUntilChanged, from, fromEvent, of, startWith, Subject, switchMap, tap } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, from, fromEvent, of, startWith, Subject, switchMap, takeLast, tap } from 'rxjs';
 import { PfBaseEntity } from '../../../config/base-entity';
 import { TrustHTMLPipe } from '../../directives/html-sanitizer.directive';
 import { PfDashboardViewModelService } from '../../../views/dashboard/dashboard-viewmodel.service';
@@ -42,6 +42,7 @@ export interface IPfTableRowAction {
 })
 export class PfTableComponent implements OnInit, OnDestroy, AfterViewInit {
   static nextId = 0;
+  loading: boolean;
     
   @HostBinding() id = `pf-table-${PfTableComponent.nextId++}`;
   @ViewChild('MatTable') MatTable: any;
@@ -86,20 +87,43 @@ export class PfTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.VM.notificationSvc.alerted$.pipe(
+      switchMap(_ => { 
+        this.paginator.pageIndex = this.VM.filterModel.page = 1
+			  return this.VM.getRows(this.VM.filterModel)
+      })
+    ).subscribe(res => {
+      if (res) this.VM.tableDataSource = new MatTableDataSource(res)
+    }) 
+      
+    this.VM.isBusy$.subscribe(busy => this.loading = busy)
+    
+    
     this.VM.tableDataSource.sort = this.sort;
     this.VM.tableDataSource.paginator = this.paginator;
+    this.VM.filterModel.per_page = this.paginator.pageSize;
 
     this.paginator.page
       .pipe(
         startWith({}),
+      // debounceTime(300),
+        // switchMap(_ => this.VM.isBusy$),
+
         tap(_ => { 
-          this.VM.filterModel.page = this.paginator.pageIndex + 1;
-          this.VM.filterModel.per_page = this.paginator.pageSize;
+          this.VM.emitIsBusy(true)
+          this.VM.filterModel.page = this.paginator.pageIndex + 1
         }),
-        switchMap(() => this.VM.getRows(this.VM.filterModel))
+        switchMap(() => this.VM.getRows$(this.VM.filterModel)),
+        catchError(error => {
+          this.VM.handleError$(error);
+
+          return of(null);
+        })
       )
       .subscribe((res) => {
-        this.VM.tableDataSource = new MatTableDataSource(res);
+        console.log('res:', res)
+        if (res) this.VM.tableDataSource = new MatTableDataSource(res);
+        this.VM.emitIsBusy(false)
       });
   
   }

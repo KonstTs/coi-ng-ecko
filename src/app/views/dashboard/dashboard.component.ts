@@ -5,7 +5,7 @@ import { DASHBOARD_CONFIG as dbc, IPF_DASHBOARD_MODE, IPfDashboardLayoutType } f
 
 import { IPfTableBaseColdef, PfTableComponent } from '../../shared/structure/table/table.component';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
+import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { PfCoin } from '../../models/coins/coin-global-type';
 import { PF_TABLE_COLDEFS_TOKEN } from '../../shared/structure/table/table-viewmodel.service';
 import { IPfSelectOptions, PfSelectComponent } from '../../shared/input/select/select.component';
@@ -22,6 +22,7 @@ import { PfButtonConfig } from '../../shared/structure/button/button.component';
 import { PfChartWidgetHeaderComponent } from './dashboard-chart-widget-header.component';
 import { PfNotificationService } from '../../services/notification.service';
 import { PfBrowserCacheService } from '../../services/browser-cache.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
 	standalone: true,
@@ -66,16 +67,8 @@ import { PfBrowserCacheService } from '../../services/browser-cache.service';
 							[(ngModel)]="VM.displayedColumns"
 						></pf-select>
 
-						<pf-select
-							style="width: 100px;"s
-							[label]="'Currency'"
-							[optionsFn$]="currencies$"
-							[(ngModel)]="VM.filterModel.vs_currency"
-							(ngModelChange)="search$($event)"
-						></pf-select>
-
 						<pf-select 
-							style="width: 130px;" 
+							style="width: 160px;" 
 							[label]="'Order'" 
 							[options]="orderOptions" 
 							[(ngModel)]="VM.filterModel.order" 
@@ -132,7 +125,7 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 	chartData: EChartsCoreOption;
 	stackData:  EChartsCoreOption;
 
-	search$: (e: any) => Observable<PfCoin[]>;
+	search$: (e: any) => any;
 	currencies$: () => Observable<string[]>;
 
 	constructor(
@@ -152,9 +145,12 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.chartData = bar;
 			this.stackData = stack;
 		});
-
+		console.log('this.VM.filterModel 1:',this.VM.filterModel)
 		this.search$ = (e) => {
-			return this.VM.search(e);
+			this.PfTable.paginator.pageIndex = this.VM.filterModel.page = 1
+			return this.VM.getRows$(this.VM.filterModel).subscribe(res => {
+				if (res) this.VM.tableDataSource = new MatTableDataSource(res)
+			})
 		};
 
 		this.currencies$ = () => {
@@ -171,10 +167,7 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 	ngOnInit(): void {}
 
 	ngAfterViewInit(): void {
-		// this.PfTable.paginator.nextPage()
 	}
 
 	ngOnDestroy(): void {}
 }
-
-// <section class="pf-height pf-jc-center-flex pf-coloumn-flex">

@@ -1,5 +1,5 @@
 import { Inject, Injectable, InjectionToken, Injector, OnDestroy, OnInit, forwardRef } from '@angular/core';
-import { BehaviorSubject, filter, Observable, of, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, catchError, filter, Observable, of, switchMap, take, tap } from 'rxjs';
 import { PF_TABLE_COLDEFS_TOKEN, PfTableViewModelService } from '../../shared/structure/table/table-viewmodel.service';
 import { PfCoin } from '../../models/coins/coin-global-type';
 import { PfCoingeckoService } from '../../api/services/coins-services.service';
@@ -45,7 +45,7 @@ export class PfDashboardViewModelService extends PfTableViewModelService<any> im
         const aa = (this.filterModel.page-1)*this.filterModel.per_page+_i
 
       if(!isNaN(_value)) return cells.currency(_value, `color:${{low_24h: '#ff451d', high_24h: '#619b48'}[_type] ?? defaultCellColor}`);
-      if(_type==='name') return cells.image(image, `<span style="color:#999">${aa}</span>`, `<strong>${name}</strong>`);
+      if(_type==='name') return cells.image(image, `<span style="color:#999">${aa+1}</span>`, `<strong>${name}</strong>`);
       if(_type==='symbol') return `<strong>${symbol.toUpperCase()}</strong>`;
       return _value;
     }
@@ -55,30 +55,23 @@ export class PfDashboardViewModelService extends PfTableViewModelService<any> im
        .map((k) => ([...this.displayedColumns, 'image'].includes(k) && { [k]:this.provideCellFormatted(coin, k, coin[k], i)}))
        .filter(coin => !!coin))))
 
-       getTotals(): Observable<any> { 
+    getTotals$(): Observable<any> { 
         return this.apiSvc.apiCoinsListGet().pipe(tap(res => this.totalEntries = res.length), untilDestroyed(this))
     }
     
 
     getRows(_query: any) {
-        console.log('this.filterModel:', this.filterModel)
+        console.log('_query:', _query)
         return this.apiSvc.apiCoinsMarketGet(_query)
             .pipe(
                 tap(res => {
+                    if (!res || this.filterModel.page > 1) return;
                     const [d,v]=[[],[]];
                     for (let i = 0; i < this.topCoinsCount; i++) (({ name, market_cap } = res[i]) => (d.push(name), v.push(market_cap)))();
                     this.barchart$.next([d,v]);
                 }),
-                switchMap(d => of(this.processReponse(d)))
+                switchMap(d => d ? of(this.processReponse(d)) : of(null))
             )
-        // return of(dummy).pipe(
-        //             tap(res => {
-        //                 const [d,v]=[[],[]];
-        //                 for (let i = 0; i < this.topCoinsCount; i++) (({ name, market_cap } = res[i]) => (d.push(name), v.push(market_cap)))();
-        //                 this.barchart$.next([d,v]);
-        //         }),
-        //             switchMap(d => of(this.processReponse(d)))
-        //         );
     }
 
     search(_term: string) {
@@ -93,7 +86,7 @@ export class PfDashboardViewModelService extends PfTableViewModelService<any> im
 
     ngOnInit(): void {
         super.ngOnInit()
-        this.getTotals().subscribe(_=> console.log('this.totalEntries:', this.totalEntries))
+        this.getTotals$().subscribe()
     }
 
     ngOnDestroy() {

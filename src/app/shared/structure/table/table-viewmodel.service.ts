@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Directive, Inject, InjectionToken, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Directive, InjectionToken, Injector, OnDestroy, OnInit } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
@@ -9,8 +9,6 @@ import { IPfTableBaseColdef } from './table.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { IPfPaginationModel, PfFilterModel } from '../../../config/filter-defs';
 import { PfNotificationService } from '../../../services/notification.service';
-import { SESSIONSTORAGE_CACHE, SESSIONSTORAGE_CACHE_TOKEN } from '../../../config/cache';
-import { PfBrowserCacheService } from '../../../services/browser-cache.service';
 
 export const PF_TABLE_COLDEFS_TOKEN = new InjectionToken<IPfTableBaseColdef[]>('PF_TABLE_COLDEFS');
 
@@ -20,7 +18,7 @@ export const PF_TABLE_COLDEFS_TOKEN = new InjectionToken<IPfTableBaseColdef[]>('
 export abstract class PfTableViewModelService<TModel extends PfBaseEntity> implements OnInit, OnDestroy {
     model: TModel[];
     tableDataSource = new MatTableDataSource<TModel>([])
-    source$ = new BehaviorSubject<MatTableDataSource<TModel>>(this.tableDataSource);
+    source$ = new Subject<TModel[]>();
     
     columns: IPfTableBaseColdef[];
     displayedColumns: string[];
@@ -31,10 +29,10 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
     protected abstract getRowsCb(_query: any): Observable<TModel[]>;
     protected abstract searchCb(_term:string): Observable<TModel[]>;
     protected abstract getItemCb(_id:string): Observable<TModel>;
-  protected notificationSvc: PfNotificationService;
+    notificationSvc: PfNotificationService;
     protected _isBusy$ = new Subject<boolean>();
 
-    protected emitIsBusy(isBusy: boolean): void {
+    emitIsBusy(isBusy: boolean): void {
         this._isBusy$.next(isBusy);
     }
     get isBusy$(): Observable<boolean> {
@@ -58,30 +56,26 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
         return of(null).pipe(
             tap(() => this.emitIsBusy(true)),
           switchMap(() => this.getRowsCb(_query)),
-          catchError(error => {
-            this.handleError$(error);
-            throw error;
-          }),
           tap((res) => {
+              if (!res) res = [];
               this.model = res;
               this.tableDataSource = new MatTableDataSource(this.model);
-              this.source$.next(this.tableDataSource);
+              this.source$.next(this.model);
           }),
-            
             untilDestroyed(this),
             finalize(() => {
                 this.emitIsBusy(false);
             })
         )
-    }
-
+  }
+  
     searchItems$(_term: string){
       return of(null).pipe(
           tap(() => this.emitIsBusy(true)),
           switchMap(() => this.searchCb(_term)),
           catchError(error => {
             this.handleError$(error);
-            throw error;
+            return of(null)
           }),
           untilDestroyed(this),
           finalize(() => {
@@ -113,12 +107,12 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
     }
 
     ngOnInit(): void {
-      // this.getRows$(this.filterModel).subscribe();
     }
 
     ngOnDestroy(): void {
       this._isBusy$.complete();
       this.source$.complete();
+      this.notificationSvc.alerted$.complete();
     }
  
    
