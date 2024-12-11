@@ -10,6 +10,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {FormsModule} from '@angular/forms';
 import {MatInputModule, MatInput} from '@angular/material/input';
 import {MatFormFieldModule, MatLabel} from '@angular/material/form-field';
+import { PfButtonComponent, PfButtonConfig } from '../../structure/button/button.component';
 
 
 const VALUE_ACCESSOR = { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => PfTextComponent), multi: true };
@@ -20,7 +21,7 @@ const PF_INPUT_BASE = { provide: PfInputBase, useExisting: forwardRef(() => PfTe
 @Component({
 	selector: 'pf-text',
 	standalone: true,
-	imports: [CommonModule, MatIconModule, MatButtonModule, FormsModule, MatInputModule, MatFormFieldModule, MatLabel],
+	imports: [CommonModule, MatIconModule, MatButtonModule, FormsModule, MatInputModule, MatFormFieldModule, PfButtonComponent],
 	templateUrl: './text.component.html',
 	styleUrls: ['./text.component.scss'],
 	providers: [VALUE_ACCESSOR, PF_INPUT_BASE],
@@ -31,6 +32,7 @@ export class PfTextComponent extends PfInputBase implements OnInit, AfterViewIni
 	@ViewChild('matInput') input: MatInput;
 	static nextId = 0;
 	searchType = 'string';
+	clearBtn: PfButtonConfig;
 
 	@HostBinding() id = `pf-text-${PfTextComponent.nextId++}`;
 
@@ -50,7 +52,8 @@ export class PfTextComponent extends PfInputBase implements OnInit, AfterViewIni
 	@Input() searchQuerySize = 3;
 
 	constructor(injector: Injector) {
-		super(injector);
+		super(injector); 
+		this.clearBtn = {icon:'close',styleClass:"pf-valign"}
 	}
 
 	onBlur(self: PfTextComponent) {

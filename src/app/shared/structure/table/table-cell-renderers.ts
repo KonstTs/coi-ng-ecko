@@ -56,7 +56,7 @@ export const PfCellRenderer = () => {
      <span style="${_style??defaultCellStyle}">${_value}</span>
   `;
   const cell_image = (_src, _prepend='', _append='') => `
-     <div class="pf-ai-center-flex">
+     <div class="pf-cell-image-wrapper pf-ai-center-flex">
         <span class="pf-cell-image-prepended pf-mrgr10">${_prepend}</span>
         <img class="pf-cell-image pf-mrgr10" src="${_src}"/>
         <span class="pf-cell-image-appended">${_append}</span>

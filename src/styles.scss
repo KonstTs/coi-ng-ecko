@@ -4,6 +4,7 @@
 @import './assets/sass/overrides';
 
 
+
 *, *:before, *:after {
   margin: 0;
   padding: 0;
@@ -79,3 +80,6 @@ button{
   justify-items: flex-end;
   align-items: flex-start;
 }
+
+
+@import './assets/sass/queries';

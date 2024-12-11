@@ -42,7 +42,7 @@ export interface IPfTableRowAction {
 })
 export class PfTableComponent implements OnInit, OnDestroy, AfterViewInit {
   static nextId = 0;
-  loading: boolean;
+  loading = true;
     
   @HostBinding() id = `pf-table-${PfTableComponent.nextId++}`;
   @ViewChild('MatTable') MatTable: any;
