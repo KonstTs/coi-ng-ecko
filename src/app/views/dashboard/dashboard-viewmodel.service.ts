@@ -62,16 +62,24 @@ export class PfDashboardViewModelService extends PfTableViewModelService<any> im
 
     getRows(_query: any) {
         console.log('_query:', _query)
-        return this.apiSvc.apiCoinsMarketGet(_query)
-            .pipe(
-                tap(res => {
-                    if (!res || this.filterModel.page > 1) return;
-                    const [d,v]=[[],[]];
-                    for (let i = 0; i < this.topCoinsCount; i++) (({ name, market_cap } = res[i]) => (d.push(name), v.push(market_cap)))();
-                    this.barchart$.next([d,v]);
+        // return this.apiSvc.apiCoinsMarketGet(_query)
+        //     .pipe(
+        //         tap(res => {
+        //             if (!res || this.filterModel.page > 1) return;
+        //             const [d,v]=[[],[]];
+        //             for (let i = 0; i < this.topCoinsCount; i++) (({ name, market_cap } = res[i]) => (d.push(name), v.push(market_cap)))();
+        //             this.barchart$.next([d,v]);
+        //         }),
+        //         switchMap(d => d ? of(this.processReponse(d)) : of(null))
+        //     )
+        return of(dummy).pipe(
+                    tap(res => {
+                        const [d,v]=[[],[]];
+                        for (let i = 0; i < this.topCoinsCount; i++) (({ name, market_cap } = res[i]) => (d.push(name), v.push(market_cap)))();
+                        this.barchart$.next([d,v]);
                 }),
-                switchMap(d => d ? of(this.processReponse(d)) : of(null))
-            )
+                    switchMap(d => of(this.processReponse(d)))
+                );
     }
 
     search(_term: string) {

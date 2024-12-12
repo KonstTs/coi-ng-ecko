@@ -48,7 +48,7 @@ import { MatTableDataSource } from '@angular/material/table';
 						</h2>
 
 						<pf-text
-							class="--not-max"
+							class="--not-max _filter-txt"
 							[iconClass]="'filter_alt'" 
 							[iconColor]="'#d5d5d5'" 
 							[cssClass]="'pf-table-filter-input'" 
@@ -59,16 +59,16 @@ import { MatTableDataSource } from '@angular/material/table';
 					</div>
 					<div class="pf-ai-jc-center-flex --filters --not-max">
 
-						<pf-select 
-							style="width: 240px" 
+						<pf-select
+							class="_filter-coloumns"
 							[label]="'Columns'" 
 							[options]="columnsMap" 
 							[multiple]="true" 
 							[(ngModel)]="VM.displayedColumns"
 						></pf-select>
 
-						<pf-select 
-							style="width: 160px;" 
+						<pf-select
+							class="_filter-order"
 							[label]="'Order'" 
 							[options]="orderOptions" 
 							[(ngModel)]="VM.filterModel.order" 
