@@ -3,8 +3,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
     { 
         path: '',
-        redirectTo: 'coins',
-        pathMatch: 'full'
+        loadComponent: () => import('./views/dashboard/dashboard.component').then(m => m.PfDashboardComponent) 
     },
     { 
         path: 'about',
