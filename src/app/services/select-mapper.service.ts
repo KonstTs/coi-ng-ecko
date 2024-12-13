@@ -14,6 +14,7 @@ export class SelectMapperService {
 
   constructor(private _injector: Injector, @Inject(SESSIONSTORAGE_CACHE_TOKEN) private _cacheSvc:PfBrowserCacheService){}
 
+  //used in a select control which was ommited 
   readonly currencies = () => {
     return this._cacheSvc.get('pfcurrencies').pipe(
       switchMap(cached => cached ? of(cached) : (this.resolveAutoGetAllFn(PfCoingeckoService, 'apiCoinsCurrenciesGet') as any)),

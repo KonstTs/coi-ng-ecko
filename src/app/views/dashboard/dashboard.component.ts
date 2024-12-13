@@ -108,12 +108,20 @@ import { PF_CHART_MOBILE_OPTIONS, PF_CHART_OPTIONS } from '../../config/chart-ba
 						status: 'closed',
 						onSwipeCssClass: '__moving',
 						state:{
-							closed: { min: 0, max: 0, x:0, y: 299 },
+							closed: { min: 0, max: 0, x:0, y: 0 },
 							open: { min:70, max:70, x:0, y: 0 }
 						}
 					}"
 					(onSwipe)="drawerSwiped($event)"
 				>
+
+					
+				@if(showDrawerTip){
+					<div class="pf-swipe-tip pf-animation-fade-out pf-motion-delay-2">
+						<div class="pf-swipe-vertical-img pf-swipe-vertical-motion _animation pf-shadow"></div>
+					</div>
+				}
+				
 				<pf-chart-widget-header
 					[title]="titleCharts"
 					[titleIcon]="'bar_chart_4_bars'"
@@ -204,7 +212,6 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
 		this.VM.barchart$.subscribe(([d, v]) => { 
 			this.chartActions = provideLayoutActionsFor(layouts, this.provideLayout.bind(this));
-			console.log(this.chartActions)
 			const { desktop, mobile, stack } = provideChartData([d, v], this.VM);
 			
 			this.chartDataD = desktop;
@@ -235,32 +242,22 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 		const limitUp = state[status].max;
 		const limitDown = state[status].min;
 	    
-		if(e.incrY <= limitUp) {
-		  e.element.reset();
-		  e.element.status = 'open';
-		  this.drawerOpen = true;
+		if (e.incrY <= limitUp) {
+			this.provideLayout('default')
+		  	e.element.reset();
+		  	e.element.status = 'open';
+		  	this.drawerOpen = true;
 		}
-		if(e.incrY > limitDown) {
-		  this._renderer.setStyle(e.element.nativeEl, 'transform', `translateY(299px)`);
-		  e.element.status = 'closed';
-		  this.drawerOpen = false;
+		if (e.incrY > limitDown) {
+			this.provideLayout('min')
+		  	this._renderer.setStyle(e.element.nativeEl, 'transform', `translateY(0)`);
+		  	e.element.status = 'closed';
+			this.drawerOpen = false;
 		};
-	}
-
-	private setStatusOpen(){
-		this.drawer?.setStatus('open');
-		this.drawerOpen = true;
-	}
-	
-	private setStatusClosed(){
-		this.drawer?.setStatus('closed');
-		this.drawerOpen = false;
 	}
 
 	private cacheDrawerTip(){
 		this._localStorage.set('pf-drawer-tip-disable', 'true');
-		setTimeout(_=> this._renderer.addClass(this.drawer.nativeEl.querySelector('#drawer-tip'), 'pf-fade-out'), 2000);
-		setTimeout(_=> this.showDrawerTip = false, 5000);
 	}
 	
 	private deCacheDrawerTip$() {
@@ -269,24 +266,14 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 	
 
 	ngOnInit(): void {
-		this.deCacheDrawerTip$().pipe(
-			take(1), untilDestroyed(this),
-			tap(res => console.log('res:', res)),
-		).subscribe(res => { 
-			// res && (this.showDrawerTip = false)
-		});
+		this.deCacheDrawerTip$().pipe(untilDestroyed(this))
+			.subscribe(res => { 
+				if (res) this.showDrawerTip = false;
+				else this.cacheDrawerTip()	
+			});
 	}
 
 	ngAfterViewInit(): void {
-		setTimeout(_ => {
-			  this.setStatusOpen();
-			//   this.cacheDrawerTip();
-			// 	setTimeout(_ => {
-			// 		this.provideLayout('min');
-			// 		this.setStatusClosed();
-			//   }, 5000);
-		   })
-	    
 	}
 
 	ngOnDestroy(): void {}

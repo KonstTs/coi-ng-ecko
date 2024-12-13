@@ -1,17 +1,13 @@
-import { Inject, Injectable, InjectionToken, Injector, OnDestroy, OnInit, forwardRef } from '@angular/core';
-import { BehaviorSubject, catchError, filter, Observable, of, switchMap, take, tap } from 'rxjs';
+import { Inject, Injectable, Injector, OnDestroy, OnInit, forwardRef } from '@angular/core';
+import { BehaviorSubject, Observable, of, switchMap, take, tap } from 'rxjs';
 import { PF_TABLE_COLDEFS_TOKEN, PfTableViewModelService } from '../../shared/structure/table/table-viewmodel.service';
 import { PfCoin } from '../../models/coins/coin-global-type';
 import { PfCoingeckoService } from '../../api/services/coins-services.service';
-import { currency, dummy } from '../../config/table';
 import { IPfTableBaseColdef } from '../../shared/structure/table/table.component';
-import { MatPaginator } from '@angular/material/paginator';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { PF_TABLE_FILTER_MODEL_TOKEN } from '../../config/filter-defs';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ICurrencyFormatter, IPfCellRenderer, PF_CELL_FORMATTER_TOKEN, PfCellRenderer } from '../../shared/structure/table/table-cell-renderers';
-import { PfBaseEntity } from '../../config/base-entity';
-import { SESSIONSTORAGE_CACHE, SESSIONSTORAGE_CACHE_TOKEN } from '../../config/cache';
+import { IPfCellRenderer, PF_CELL_FORMATTER_TOKEN, PfCellRenderer } from '../../shared/structure/table/table-cell-renderers';
+import { SESSIONSTORAGE_CACHE_TOKEN } from '../../config/cache';
 import { PfBrowserCacheService } from '../../services/browser-cache.service';
 
 export type CgQueryOrderType = 'market_cap_asc'|'market_cap_desc'|'volume_asc'|'volume_desc'|'id_asc'|'id_desc';
@@ -36,9 +32,9 @@ export class PfDashboardViewModelService extends PfTableViewModelService<any> im
         @Inject(SESSIONSTORAGE_CACHE_TOKEN) protected cacheSvc:PfBrowserCacheService
     ){
         super(columns, filters, injector);
-
     }
 
+    //converts values to maturely formed table cells by using a cellformmating utility - ./table-cell-renderes.ts
     private provideCellFormatted(_coin, _type:any, _value:any, _i:number):string {
       const {name, image, symbol} = _coin;
         const { cells, defaultCellColor } = this.Renderer;
@@ -50,42 +46,39 @@ export class PfDashboardViewModelService extends PfTableViewModelService<any> im
       return _value;
     }
 
+    //converts raw data to model/tabledatasource consumable datasets stripped of unnecessary noise.
+    // tunnels data through cellformating method above 
     private processReponse = (res:PfCoin[]):any => res
        .map((coin:any, i) => Object.assign({}, ...(Object.keys(coin)
        .map((k) => ([...this.displayedColumns, 'image'].includes(k) && { [k]:this.provideCellFormatted(coin, k, coin[k], i)}))
        .filter(coin => !!coin))));
 
+    
+    //get list of all coins - used to provide totals in coint table
     getTotals$(): Observable<any> { 
         return this.apiSvc.apiCoinsListGet().pipe(tap(res => this.totalEntries = res.length), untilDestroyed(this))
     }
-    
 
+    //get coins by market
     getRows(_query: any) {
-        // return this.apiSvc.apiCoinsMarketGet(_query)
-        //     .pipe(
-        //         tap(res => {
-        //             if (!res || this.filterModel.page > 1) return;
-        //             const [d,v]=[[],[]];
-        //             for (let i = 0; i < this.topCoinsCount; i++) (({ name, market_cap } = res[i]) => (d.push(name), v.push(market_cap)))();
-        //             this.barchart$.next([d,v]);
-        //         }),
-        //         switchMap(d => d ? of(this.processReponse(d)) : of(null))
-        //     )
-        return of(dummy).pipe(
-                    tap(res => {
-                        const [d,v]=[[],[]];
-                        for (let i = 0; i < this.topCoinsCount; i++) (({ name, market_cap } = res[i]) => (d.push(name), v.push(market_cap)))();
-                        this.barchart$.next([d,v]);
+        return this.apiSvc.apiCoinsMarketGet(_query)
+            .pipe(
+                tap(res => {
+                    if (!res || this.filterModel.page > 1) return;
+                    const [d,v]=[[],[]];
+                    for (let i = 0; i < this.topCoinsCount; i++) (({ name, market_cap } = res[i]) => (d.push(name), v.push(market_cap)))();
+                    this.barchart$.next([d,v]);
                 }),
-                    switchMap(d => of(this.processReponse(d)))
-                );
+                switchMap(d => d ? of(this.processReponse(d)) : of(null))
+            )
     }
 
+    //to be implemented 
     search(_term: string) {
         // return this.apiSvc.apiCoinsSearchGet({ query: _term });
         return of(null);
     }
-
+    //to be implemented
     getItem(_id: string){
         // return this.apiSvc.apiCoinsSingleGet({id: _id})
         return of(null)

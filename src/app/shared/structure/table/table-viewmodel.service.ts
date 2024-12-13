@@ -16,22 +16,32 @@ export const PF_TABLE_COLDEFS_TOKEN = new InjectionToken<IPfTableBaseColdef[]>('
 @UntilDestroy()
 @Directive()
 export abstract class PfTableViewModelService<TModel extends PfBaseEntity> implements OnInit, OnDestroy {
+    //raw responce
     model: TModel[];
-    tableDataSource = new MatTableDataSource<TModel>([])
+   
+    //table consumable datasets
+    tableDataSource = new MatTableDataSource<TModel>([]);
+  
+    //datastream
     source$ = new Subject<TModel[]>();
     
+    //table bootstraping resources
     columns: IPfTableBaseColdef[];
     displayedColumns: string[];
     baseFilterModel: IPfPaginationModel = {page: 1, per_page: 50}
     filterModel: PfFilterModel<any>;
     totalEntries: number;
-    
+  
+    //instance restricted callbacks ensuring generic's class independence and immutability
     protected abstract getRowsCb(_query: any): Observable<TModel[]>;
     protected abstract searchCb(_term:string): Observable<TModel[]>;
-    protected abstract getItemCb(_id:string): Observable<TModel>;
-    notificationSvc: PfNotificationService;
-    protected _isBusy$ = new Subject<boolean>();
+    protected abstract getItemCb(_id: string): Observable<TModel>;
 
+    //global notification 
+    notificationSvc: PfNotificationService;
+  
+    //publishing class availability
+    protected _isBusy$ = new Subject<boolean>();
     emitIsBusy(isBusy: boolean): void {
         this._isBusy$.next(isBusy);
     }
@@ -39,6 +49,7 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
       return this._isBusy$.asObservable();
     }
 
+  
   constructor(
     _columns: IPfTableBaseColdef[],
     _filters: PfFilterModel<any>,
@@ -51,7 +62,7 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
       this.notificationSvc = injector.get<PfNotificationService>(PfNotificationService);
   }
 
-
+    //provides raw table datasets 
     getRows$(_query?: any){
         return of(null).pipe(
             tap(() => this.emitIsBusy(true)),
@@ -68,7 +79,9 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
             })
         )
   }
-  
+
+
+    // to be implemented
     searchItems$(_term: string){
       return of(null).pipe(
           tap(() => this.emitIsBusy(true)),
@@ -84,6 +97,7 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
         )
     }
 
+  // to be implemented
     getItem$(_id: string){
         return of(null).pipe(
             tap(() => this.emitIsBusy(true)),
@@ -100,7 +114,7 @@ export abstract class PfTableViewModelService<TModel extends PfBaseEntity> imple
     }
 
 
- 
+    // basic error handling utilizing global notification svc
     handleError$(error: HttpErrorResponse): void {
       // handle message and provide strings;
       this.notificationSvc.alert({title:'Bummer', severity: 'error'})

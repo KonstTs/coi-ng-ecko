@@ -16,6 +16,7 @@ html, body{
   font-size: $fontSize;
   font-weight: $fontWeight500;
   color: #525c65;
+  overflow: hidden;
 }
 a{display: block; text-decoration: none;}
 img{width:100%}

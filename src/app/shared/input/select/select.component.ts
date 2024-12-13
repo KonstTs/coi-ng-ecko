@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, forwardRef, HostBinding, Injector, Input, NgModule, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, forwardRef, HostBinding, Injector, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgModel } from '@angular/forms';
 import { PfInputBase } from '../input-base';
 import { Observable, take } from 'rxjs';
@@ -56,11 +56,7 @@ export class PfSelectComponent extends PfInputBase implements OnInit, AfterViewI
     super(injector);
   }
 
-  close(){
-    console.log('onClose')
-  }
-
-
+  close(){}
   onChange = (_: any) => {};
   onTouched = () => {};
 
@@ -90,8 +86,11 @@ export class PfSelectComponent extends PfInputBase implements OnInit, AfterViewI
   ngAfterViewInit(): void {
     super.ngAfterViewInit();
     this.select.openedChange.pipe(untilDestroyed(this)).subscribe(open => {
-      setTimeout(_=> (getElement('.cdk-overlay-connected-position-bounding-box') as HTMLElement).onclick = () =>  this.select.close())
-      this.select.panel?.nativeElement?.addEventListener('mouseleave', () => setTimeout(() =>this.select.close(), 300))
+      setTimeout(_ => {
+        const clicker = getElement('.cdk-overlay-connected-position-bounding-box') as HTMLElement;
+        if (clicker) clicker.onclick = () => this.select.close();
+        this.select.panel?.nativeElement?.addEventListener('mouseleave', () => setTimeout(() => this.select.close(), 300))
+      })
     })
   }
 

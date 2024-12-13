@@ -32,14 +32,17 @@ export type PfChartDataType = {
 })
 export class PfChartComponent implements OnInit, AfterViewInit, OnDestroy {
   static nextId = 0;
+  //dom concerning handlers
   @HostBinding() id = `pf-chart-${PfChartComponent.nextId++}`;
-  @Host()
+
   @ViewChild('chart')
   chart: ECharts;
   instance: ECharts;
   resizer: ResizeObserver;
 
+  //configurable resizeObserver's source hook 
   @Input() sizer: string;
+
   @Input() width = '90%';
   @Input() height = '300px';
   @Input() initOptions = { renderer: 'svg', width: 1000 , height: 300 };
@@ -57,6 +60,7 @@ export class PfChartComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
+    // attach obeservation on provided element -sizer- and adjust chart's geometric behaviour accordingly
     this.resizer = new ResizeObserver((oens) => {
       for (let oen of oens) {
         const {contentRect: { width, height }} = oen;

@@ -42,14 +42,17 @@ export interface IPfTableRowAction {
 })
 export class PfTableComponent implements OnInit, OnDestroy, AfterViewInit {
   static nextId = 0;
-  loading = true;
+  //availanility flag
+  loading;
     
+  //DOM concerning variables
   @HostBinding() id = `pf-table-${PfTableComponent.nextId++}`;
   @ViewChild('MatTable') MatTable: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('filterCtrl') filterCtrl: MatInput;
 
+  //exposed configuration
   @Input() VM: PfDashboardViewModelService;
   @Input() pagination: boolean = true;
   @Input() pagesize = 50;
@@ -83,10 +86,16 @@ export class PfTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.VM.ngOnInit()
+    this.VM.ngOnInit();
+    // this.VM.isBusy$.subscribe(busy => { 
+    //   this.loading = busy;
+    // })
+    
   }
 
   ngAfterViewInit(): void {
+    // listen to global notifications
+    // especially valuable for error handling and strategy conforming  
     this.VM.notificationSvc.alerted$.pipe(
       switchMap(_ => { 
         this.paginator.pageIndex = this.VM.filterModel.page = 1
@@ -96,9 +105,7 @@ export class PfTableComponent implements OnInit, OnDestroy, AfterViewInit {
       if (res) this.VM.tableDataSource = new MatTableDataSource(res)
     }) 
       
-    this.VM.isBusy$.subscribe(busy => this.loading = busy)
-    
-    
+    //bootstrap table with vm feed
     this.VM.tableDataSource.sort = this.sort;
     this.VM.tableDataSource.paginator = this.paginator;
     this.VM.filterModel.per_page = this.paginator.pageSize;
@@ -118,9 +125,15 @@ export class PfTableComponent implements OnInit, OnDestroy, AfterViewInit {
       )
       .subscribe((res) => {
         if (res) this.VM.tableDataSource = new MatTableDataSource(res);
+        this.VM.tableDataSource.sort = this.sort;
         this.VM.emitIsBusy(false)
       });
   
+    setTimeout(_ => { 
+      this.VM.isBusy$.subscribe(busy => { 
+        this.loading = busy;
+      })
+    })
   }
 
   onMouseEnter() {

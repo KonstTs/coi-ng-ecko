@@ -159,7 +159,6 @@ import { take, tap, map } from 'rxjs/operators';
     reset() {
       this.style = null;
       this.rect = { x: 0, y: 0 };
-      // this.origin = { x: 0, y: 0 };
     }
   }
 

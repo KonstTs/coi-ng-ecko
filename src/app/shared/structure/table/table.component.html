@@ -29,7 +29,6 @@
       [pageSize]="pagesize" 
       [length]="VM.totalEntries"  
       [class]="pagerClass" aria-label="Page"
-      [ariaBusy]="VM.isBusy$ | async"
       (mouseenter)="onMouseEnter()" 
       (mouseleave)="onMouseLeave()" 
   ></mat-paginator>

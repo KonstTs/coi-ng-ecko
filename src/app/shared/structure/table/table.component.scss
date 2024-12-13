@@ -73,8 +73,6 @@
             background-color: #f1f1f1;
         }
         .mat-mdc-cell{
-            // max-width: 25vw;
-
         }
         td.mat-column-name{
             box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.2);
@@ -101,33 +99,25 @@
         .mat-mdc-paginator{
             
             color: $blue;
-            // background: $greyDDD;
             border-bottom-left-radius: 10px;
             border-bottom-right-radius: 10px;
             
             font-size: .9rem;
         }
     }
-    
-    
-    
+        
     .mat-mdc-input-element ._pf-table-filter-input .cdk-text-field-autofill-monitored{
         background-color: $inputBg;
         color: $inputColor;
     }
 
-    
-
     &::ng-deep{
         .mat-mdc-header-cell{
             background-color: $white !important;
             color: $blue;
-            font-weight: 700;;
-            // border-bottom: solid 2px $blue;
+            font-weight: 700;
         }
         .mat-mdc-cell{
-            // box-shadow: 2px 0px 5px -2px rgba(0, 0, 0, 0.3);
-            // overflow-y: hidden;
             .pf-cell-image{
                 height: 25px;
                 width: auto;
@@ -137,7 +127,6 @@
        
         tbody:hover{
             tr{
-                // color:#999 !important;
                 opacity: .6;
                 &:hover{
                     opacity: 1;
@@ -148,9 +137,6 @@
             }
         }
         tr:hover{
-            // background-color: #fff !important;
-            // color: #000 !important;
-            // box-shadow: 0 0 5px 0px rgba(0, 0, 0, .9);
         }
     }
 }

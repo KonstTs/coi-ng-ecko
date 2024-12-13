@@ -109,6 +109,47 @@
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
         z-index: 1;
+        position: relative;
+
+        &::before{
+            content: '';
+            position: absolute;
+            top:100%;
+            left: 0;
+            right: 0;
+            height: 100ΩΗΗ;
+            background-color: #f1f1f1;
+        }
+
+        .pf-swipe-tip{
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            .pf-swipe-vertical-img{
+                background: url(/assets/img/swipe-gesture.png) center / 64% no-repeat;
+              }
+            ._animation{
+                margin-top: -20px;
+                width: 130px;
+                overflow: visible;
+                height: 130px;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 100%;
+                border: solid 3px #c5c5c5
+            }
+
+            
+        }
+
+
         &::ng-deep{
             .pf-header-stacked-chart{
                 visibility: hidden;
@@ -121,37 +162,6 @@
         }
     }
 
-
-//     .qr-area{
-//     position: fixed;
-//     left: 0;
-//     right: 0;
-//     bottom: 0;
-//     height: 36%;
-//     background-color: rgba(255,255,255,1);
-//     border-top-left-radius: 15px;
-//     border-top-right-radius: 15px;
-//     box-shadow: 0px -1px 5px 0px #999;
-//     z-index: 2;
-//     padding: 20px;
-
-
-//     &.__drawer{
-//         padding-bottom: 60px;
-//         padding-top: 7px;
-//         bottom:-340px;
-//         height: 600px;
-//         transform: translateY(0);
-
-
-//     &.__closed{
-//         // bottom: -260px;
-//         transform: translateY(235px);
-//     }
-
-
-//     }
-// }
 
     &.--docked{
         &.--min{

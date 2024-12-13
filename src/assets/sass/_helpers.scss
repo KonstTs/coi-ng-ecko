@@ -721,13 +721,11 @@
   
 
 
-.pf-swipe-vertical-img{
-  background: url(/assets/img/swipe-gesture.png) center / 100% no-repeat;
-}
+
 
 
 .pf-swipe-vertical-motion{
-  animation: swipeVertical 4s ease 0s 1 normal forwards;
+  animation: swipeVertical 5s ease 0s 1 normal forwards;
 }
 
 
@@ -735,16 +733,6 @@
   0%, 60%, 100% { transform: translateY(0); }
   10%, 30%, 50% { transform: translateY(-12px); }
   20%, 40% { transform: translateY(12px);}
-
-
-  // 80% {
-  //  transform: translateY(7px);
-  // }
-
-
-  // 90% {
-  //  transform: translateY(-7px);
-  // }
 }
 
 

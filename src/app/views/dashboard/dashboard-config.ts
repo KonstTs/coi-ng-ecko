@@ -15,7 +15,6 @@ export interface IPF_DASHBOARD_MODE {
 
 export const DASHBOARD_CONFIG = {
   columns: [
-    // { columnDef: 'id', header: 'ID', cell: (item: any) => `${item.id}`},
     { columnDef: 'name', header: 'Name', sticky: true, cell: (item: any) => `${item.name}`},
     { columnDef: 'symbol', header: 'Symbol', cell: (item: any) => `${item.symbol}`},
     { columnDef: 'current_price', header: 'Current price', cell: (item: any) => `${item.current_price}`},
@@ -37,7 +36,6 @@ export const DASHBOARD_CONFIG = {
       hostClass: '',
       iconClass: 'chips'
     },
-    
     max: {
       id: 'max',
       hostClass: '--max',
@@ -52,10 +50,8 @@ export const DASHBOARD_CONFIG = {
     { value: 'id_asc', label: 'Id Asc' },
     { value: 'id_desc', label: 'Id Desc' }
   ],
-
   provideLayoutActionsFor: (layouts, fn): PfButtonConfig[] =>
     Object.entries(layouts)
-      
       .map(([key, obj]) =>
       ({
           id: key,
@@ -65,9 +61,7 @@ export const DASHBOARD_CONFIG = {
           styleClass: `--layout-action-${key}`,
           command: () => fn(key),
           ...(key === 'default' && { active: true })
-      })),
-
-
+  })),
   provideChartData: ([d, v]: [[], []], vm: PfDashboardViewModelService): any => {
     const { Renderer: { CurrencyFormatter: { formatWithOptions } } } = vm;
     const fo = { maximumFractionDigits: 2, notation: 'compact' };
@@ -90,7 +84,7 @@ export const DASHBOARD_CONFIG = {
         }]
       },
       mobile: {
-        yAxis: { data: d.reverse() },
+        yAxis: { data: d?.reverse() },
         xAxis: {
           axisLabel: {
             formatter: (d) => formatWithOptions(d, {...fo, maximumFractionDigits: 0}).value
@@ -100,7 +94,7 @@ export const DASHBOARD_CONFIG = {
           name: 'Market Cap',
           type: 'bar',
           itemStyle: { borderRadius: [0, 50, 50, 0] },
-          data: v?.map((val,i) => ({ value: val, itemStyle: { color: clr[i] } })).reverse()
+          data: v?.map((val,i) => ({ value: val, itemStyle: { color: clr[i] } }))?.reverse()
         }]
       },
       stack: {
