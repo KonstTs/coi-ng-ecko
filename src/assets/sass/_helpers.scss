@@ -718,6 +718,35 @@
     animation-delay: 5s;
   }
   
+  
+
+
+.pf-swipe-vertical-img{
+  background: url(/assets/img/swipe-gesture.png) center / 100% no-repeat;
+}
+
+
+.pf-swipe-vertical-motion{
+  animation: swipeVertical 4s ease 0s 1 normal forwards;
+}
+
+
+@keyframes swipeVertical {
+  0%, 60%, 100% { transform: translateY(0); }
+  10%, 30%, 50% { transform: translateY(-12px); }
+  20%, 40% { transform: translateY(12px);}
+
+
+  // 80% {
+  //  transform: translateY(7px);
+  // }
+
+
+  // 90% {
+  //  transform: translateY(-7px);
+  // }
+}
+
 
   
   .pf-blink{
@@ -738,9 +767,6 @@
     100% {opacity: 1 !important;}
   }
   
-  
-  
-  
   @keyframes fadeout {
     0% {opacity: 1;}
     100% {opacity: 0;}
@@ -755,8 +781,7 @@
   .pf-animation-slide-in-right{
     animation: slideInRight 1s ease 0s 1 normal forwards;;
   }
-  
-  
+
   
   
   @keyframes slideInRight {

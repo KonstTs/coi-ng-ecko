@@ -7,6 +7,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSelect, MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
+import { getElement } from '../../utils';
 
 
 export interface IPfSelectOptions {
@@ -89,7 +90,8 @@ export class PfSelectComponent extends PfInputBase implements OnInit, AfterViewI
   ngAfterViewInit(): void {
     super.ngAfterViewInit();
     this.select.openedChange.pipe(untilDestroyed(this)).subscribe(open => {
-      this.select.panel?.nativeElement?.addEventListener('mouseleave', () => setTimeout(() =>this. select.close(), 300))
+      setTimeout(_=> (getElement('.cdk-overlay-connected-position-bounding-box') as HTMLElement).onclick = () =>  this.select.close())
+      this.select.panel?.nativeElement?.addEventListener('mouseleave', () => setTimeout(() =>this.select.close(), 300))
     })
   }
 

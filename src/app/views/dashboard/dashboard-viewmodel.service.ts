@@ -61,7 +61,6 @@ export class PfDashboardViewModelService extends PfTableViewModelService<any> im
     
 
     getRows(_query: any) {
-        console.log('_query:', _query)
         // return this.apiSvc.apiCoinsMarketGet(_query)
         //     .pipe(
         //         tap(res => {

@@ -9,7 +9,7 @@ import { MatFormField } from '@angular/material/form-field';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { catchError, debounceTime, distinctUntilChanged, from, fromEvent, of, startWith, Subject, switchMap, takeLast, tap } from 'rxjs';
 import { PfBaseEntity } from '../../../config/base-entity';
-import { TrustHTMLPipe } from '../../directives/html-sanitizer.directive';
+import { TrustHTMLPipe } from '../../../pipes/html-sanitizer.pipe';
 import { PfDashboardViewModelService } from '../../../views/dashboard/dashboard-viewmodel.service';
 import { SESSIONSTORAGE_CACHE } from '../../../config/cache';
 import { getElement } from '../../utils';
@@ -106,9 +106,6 @@ export class PfTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.paginator.page
       .pipe(
         startWith({}),
-      // debounceTime(300),
-        // switchMap(_ => this.VM.isBusy$),
-
         tap(_ => { 
           this.VM.emitIsBusy(true)
           this.VM.filterModel.page = this.paginator.pageIndex + 1
@@ -116,12 +113,10 @@ export class PfTableComponent implements OnInit, OnDestroy, AfterViewInit {
         switchMap(() => this.VM.getRows$(this.VM.filterModel)),
         catchError(error => {
           this.VM.handleError$(error);
-
           return of(null);
         })
       )
       .subscribe((res) => {
-        console.log('res:', res)
         if (res) this.VM.tableDataSource = new MatTableDataSource(res);
         this.VM.emitIsBusy(false)
       });

@@ -1,19 +1,58 @@
-@media only screen and (max-width: 319px){}
+@media only screen and (max-width: 319px){
+     
+}
 @media only screen and (max-width: 374px){
-
+     ._header{
+          font-size: 90%;
+     }
 }
 @media only screen and (max-width: 424px){
+     .layout-wrapper {
+          .topbar{
+          }
+          .content{
+               padding: .8rem .8rem 0 .8rem !important;
+          }
+     }
+     .widget{
+          padding: 0.9rem !important;
+     }
+     .mat-mdc-table * {
+          font-size: 95% !important;
+          .mdc-data-table__cell{
+               padding: 0 6px 0 6px!important;
+               max-width: 30vw;
+               .pf-cell-image-prepended{
+                    margin-right: 2px!important;
+               }
+               .pf-cell-image{
+                    margin-right: 4px !important;
+                    margin-left: 0;
+               }
+          }
+      } 
      .--dock{
           ._descr{font-size: .9rem;}
           .pf-header-stacked-chart{display: none;}
      }
 }
 @media only screen and (max-width: 460px){
-
+     .mat-mdc-table * {
+          font-size: 97% !important;
+          .mdc-data-table__cell{
+               padding: 0 6px 0 6px;
+               max-width: 30vw;
+               .pf-cell-image{
+                    margin-right: 4px !important;
+                    margin-left: 0;
+               }
+          }
+      } 
      .--dock{
           ._descr{display: none;}
      }
 }
+
 @media only screen and (max-width: 594px){
      .topbar{
           ._section{
@@ -21,7 +60,7 @@
           }
      }
      .widget{
-          padding: .8rem .7rem;
+          padding: 0.9rem;
      }
      .--coins{
           ._header{
@@ -30,7 +69,7 @@
                     .mat-mdc-form-field{
                          @include pf-motion-mixin;
                          width: 31px;
-                         &.mat-focused{width: 225px;}
+                         &.mat-focused{width: 100%;}
                     }
                     
                     .mdc-text-field{
@@ -59,6 +98,15 @@
      .--dock{
           ._descr{font-size: .9rem;}
      }
+     .mat-mdc-option{
+          padding:7px !important;
+          .mdc-list-item__primary-text{
+               font-size: 95% !important;
+          }
+          .mat-pseudo-checkbox-full{
+               margin-right: 5px !important;
+          }          
+     }
 }
 @media only screen and (max-width: 700px){
      .layout-wrapper {
@@ -72,6 +120,7 @@
      }
      .widget{
           padding: .8rem;
+
           ._header{
                padding-left: .5rem !important;
                padding-right: .5rem !important;
@@ -95,21 +144,42 @@
                }
            }
      }
+
+     .mat-mdc-option{
+          padding: 10px !important;
+          .mdc-list-item__primary-text{
+               font-size: 95% !important;
+          }
+          .mat-pseudo-checkbox-full{
+               margin-right: 5px !important;
+          }          
+     }
      
 }
 @media only screen and (max-width: 767px){
-     .topbar{
-          .--logo{
-               ._sub{
-                    font-size: 0.7rem !important;
-                    bottom: -5px !important;
+     .layout-wrapper{
+          .topbar{
+               .--logo{
+                    ._sub{
+                         font-size: 0.7rem !important;
+                         bottom: -5px !important;
+                    }
                }
+          }  
+          .content{
+               padding: 1rem 1.2rem 0 1.2rem;
           }
-     }  
+     }
+     
      .--min{
           .--dock{
                ._descr{display: none;}
           }
+     }
+     .--coins{
+          // .mat-column-name{
+          //      box-shadow: 0 1px 0 0 rgba(0,0,0,.5);
+          // } 
      }
      .mat-mdc-paginator-range-actions{
           .mat-mdc-icon-button{

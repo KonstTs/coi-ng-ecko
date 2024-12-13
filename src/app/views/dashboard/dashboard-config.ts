@@ -55,12 +55,14 @@ export const DASHBOARD_CONFIG = {
 
   provideLayoutActionsFor: (layouts, fn): PfButtonConfig[] =>
     Object.entries(layouts)
+      
       .map(([key, obj]) =>
       ({
           id: key,
           color: '#c1c1c1',
           activeColor: '#4285f4',
           icon: (<any>obj).iconClass,
+          styleClass: `--layout-action-${key}`,
           command: () => fn(key),
           ...(key === 'default' && { active: true })
       })),

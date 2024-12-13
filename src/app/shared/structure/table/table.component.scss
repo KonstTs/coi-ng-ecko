@@ -18,6 +18,7 @@
 
         .mat-mdc-paginator-range-label{
             font-weight: bold;
+            margin: 0;
         }
 
         .mat-mdc-form-field{
@@ -71,6 +72,14 @@
             border-bottom: none;
             background-color: #f1f1f1;
         }
+        .mat-mdc-cell{
+            // max-width: 25vw;
+
+        }
+        td.mat-column-name{
+            box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.2);
+       } 
+  
         
         &.--zebra{
             tr:nth-of-type(odd) {
@@ -113,15 +122,19 @@
         .mat-mdc-header-cell{
             background-color: $white !important;
             color: $blue;
+            font-weight: 700;;
             // border-bottom: solid 2px $blue;
         }
         .mat-mdc-cell{
+            // box-shadow: 2px 0px 5px -2px rgba(0, 0, 0, 0.3);
+            // overflow-y: hidden;
             .pf-cell-image{
                 height: 25px;
                 width: auto;
             }
         }
-
+        
+       
         tbody:hover{
             tr{
                 // color:#999 !important;
