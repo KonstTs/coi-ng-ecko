@@ -26,6 +26,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { IpfSwipeEvent, pfSwipeDirective } from '../../directives/swipe.directive';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { PfDeviceService } from '../../services/device.service';
+import { PF_CHART_MOBILE_OPTIONS, PF_CHART_OPTIONS } from '../../config/chart-base-options';
 @UntilDestroy()
 @Component({
 	standalone: true,
@@ -122,7 +123,7 @@ import { PfDeviceService } from '../../services/device.service';
 				></pf-chart-widget-header>
 
 				<div class="_charts pf-motion pf-animation-fade-in">
-					<pf-chart [merge]="chartData" [sizer]="'._charts'"></pf-chart>
+					<pf-chart [options]="chartMobile" [merge]="chartDataM" [sizer]="'._charts'"></pf-chart>
 				</div>
 			</section>
 			}
@@ -137,7 +138,7 @@ import { PfDeviceService } from '../../services/device.service';
 					></pf-chart-widget-header>
 
 					<div class="_charts pf-motion pf-animation-fade-in">
-						<pf-chart [merge]="chartData" [sizer]="'._charts'"></pf-chart>
+						<pf-chart [options]="chartDesktop" [merge]="chartDataD" [sizer]="'._charts'"></pf-chart>
 					</div>
 				</section>
 			}
@@ -166,7 +167,10 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 	layout: IPfDashboardLayoutType;
 	
 	chartActions: PfButtonConfig[];
-	chartData: EChartsCoreOption;
+	chartMobile = PF_CHART_MOBILE_OPTIONS;
+	chartDesktop = PF_CHART_OPTIONS;
+	chartDataD: EChartsCoreOption;
+	chartDataM: EChartsCoreOption;
 	stackData: EChartsCoreOption;
 	
 	drawerOpen = false;
@@ -192,7 +196,7 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 		this._deviceSvc.isMobile$().subscribe(res => {
 			this.bootstrapForMobile = res; 
 		})
-
+		
 		this.modes = layouts;
 		this.orderOptions = ordering;
 		this.columnsMap = this.VM.columns.map((c, i) => ({ label: c.header, value: c.columnDef }));
@@ -201,8 +205,10 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.VM.barchart$.subscribe(([d, v]) => { 
 			this.chartActions = provideLayoutActionsFor(layouts, this.provideLayout.bind(this));
 			console.log(this.chartActions)
-			const { bar, stack } = provideChartData([d, v], this.VM);
-			this.chartData = bar;
+			const { desktop, mobile, stack } = provideChartData([d, v], this.VM);
+			
+			this.chartDataD = desktop;
+			this.chartDataM = mobile;
 			this.stackData = stack;
 		});
 
@@ -224,13 +230,6 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.layout = (<any>this.modes)[type];
 	}
 
-	setDrawerStatus(){
-		if (this.drawer)
-			this.drawer.status === 'open' ?
-			this.setStatusClosed() :
-			this.setStatusOpen();
-	}
-
 	drawerSwiped(e:IpfSwipeEvent){
 		const {element:{status, state}} = e;
 		const limitUp = state[status].max;
@@ -249,12 +248,12 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	private setStatusOpen(){
-		this.drawer.setStatus('open');
+		this.drawer?.setStatus('open');
 		this.drawerOpen = true;
 	}
 	
 	private setStatusClosed(){
-		this.drawer.setStatus('closed');
+		this.drawer?.setStatus('closed');
 		this.drawerOpen = false;
 	}
 

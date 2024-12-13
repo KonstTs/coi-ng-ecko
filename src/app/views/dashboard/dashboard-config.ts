@@ -75,7 +75,7 @@ export const DASHBOARD_CONFIG = {
     const stacks = d?.map((dt, i) => ({ name: dt, type: 'bar', stack: 'total', label: { show: false }, data:[{ value: v[i], itemStyle: { color: clr[i] } }] }))
     
     return {
-      bar: {
+      desktop: {
         xAxis: { data: d },
         yAxis: {
           axisLabel: {
@@ -87,6 +87,20 @@ export const DASHBOARD_CONFIG = {
           type: 'bar',
           itemStyle: { borderRadius: [50, 50, 0, 0] },
           data: v?.map((val,i) => ({ value: val, itemStyle: { color: clr[i] } }))
+        }]
+      },
+      mobile: {
+        yAxis: { data: d.reverse() },
+        xAxis: {
+          axisLabel: {
+            formatter: (d) => formatWithOptions(d, {...fo, maximumFractionDigits: 0}).value
+          }
+        },
+        series: [{
+          name: 'Market Cap',
+          type: 'bar',
+          itemStyle: { borderRadius: [0, 50, 50, 0] },
+          data: v?.map((val,i) => ({ value: val, itemStyle: { color: clr[i] } })).reverse()
         }]
       },
       stack: {

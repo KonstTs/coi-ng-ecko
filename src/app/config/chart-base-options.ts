@@ -14,7 +14,7 @@ export const PF_CHART_OPTIONS: EChartsCoreOption ={
 
 export const PF_CHART_MOBILE_OPTIONS: EChartsCoreOption = {
   ...PF_CHART_OPTIONS,
-  grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+  grid: { left: '0', right: '0', bottom: '3%', top:'4%', containLabel: true },
   yAxis: { type: 'category', axisLabel: { interval: 0, width:50, overflow: 'truncate' }, axisTick: { alignWithLabel: true } },
   xAxis: { type: 'value'}
 };

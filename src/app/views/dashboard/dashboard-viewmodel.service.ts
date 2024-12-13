@@ -53,7 +53,7 @@ export class PfDashboardViewModelService extends PfTableViewModelService<any> im
     private processReponse = (res:PfCoin[]):any => res
        .map((coin:any, i) => Object.assign({}, ...(Object.keys(coin)
        .map((k) => ([...this.displayedColumns, 'image'].includes(k) && { [k]:this.provideCellFormatted(coin, k, coin[k], i)}))
-       .filter(coin => !!coin))))
+       .filter(coin => !!coin))));
 
     getTotals$(): Observable<any> { 
         return this.apiSvc.apiCoinsListGet().pipe(tap(res => this.totalEntries = res.length), untilDestroyed(this))
@@ -93,7 +93,7 @@ export class PfDashboardViewModelService extends PfTableViewModelService<any> im
 
     ngOnInit(): void {
         super.ngOnInit()
-        this.getTotals$().subscribe()
+        this.getTotals$().subscribe();
     }
 
     ngOnDestroy() {
