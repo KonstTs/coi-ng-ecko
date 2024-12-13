@@ -4,23 +4,23 @@
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.11.
 
 
-# preview
+## preview
 http://dot-studios.gr/demo/coi-ng-ecko/
 
-#run dev
+## run dev
 npm start
 
-#build
+## builds
 npm run build
 npm run build-prod
 
-#package validation and version compatibility
+## package validation and version compatibility
 npm prestart
 
-#stats
+## stats
 npm bundle-stats
 
-#report - webpack bundle analyzer
+## reports - webpack bundle analyzer
 npm bundle-report
 
 
