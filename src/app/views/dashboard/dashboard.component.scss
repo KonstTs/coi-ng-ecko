@@ -1,32 +1,235 @@
 @use "../../../assets/sass/variables" as *;
 
+:host.mobile{
+    &::ng-deep{
+        .--layout-action-max {
+            display: none !important;
+        }
+    }
+    }
 
 .dashboard{
-    .card{
+        
+    .widget{
         border-radius: $borderRadius;
         background-color: #f1f1f1;
         padding: 1rem 1.1rem;
-    
-        ._header{
-            border-bottom: 2px solid $blue;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-            background-color: #ddd;
-            padding: .54rem 1rem .5rem 1rem;
 
-            ._title{
+        &::ng-deep{
+            ._header{
+                border-bottom: 2px solid $blue;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                background-color: #ddd;
+                padding: 0 1rem;
+                display: flex !important;
+                align-items: center;
+                justify-content: space-between !important;
+                height: 50px;
+    
+                h2{
+                    max-width: 50%;
+                    .pf-icon{
+                        display: inline;
+                        color: $headerLightGrey;
+                        font-size: 26px;
+                        font-weight: 300 !important;
+                    }
+                }
+    
+                ._section{
+                    display: flex
+                }
+
+                .pf-header-actions{
+                    margin-left: 1.5rem;
+                    display: flex;
+                    height: 100%;
+                    align-items: center;
+
+                    .pf-header-action{
+                        display: flex;                        
+                        justify-content: center;
+                        align-items: center;
+    
+                        button{
+                            width: 35px;
+                            height: 35px;
+                            span{
+                                color: inherit;
+                                font-weight: 300 !important;
+                                font-size: 1.8rem;
+                                cursor: pointer;
+                            }
+                        }
+                        &:hover{
+                            button{transform: scale(1.2);}
+                        }
+                        .p-button.p-button-icon-only{
+                            padding-top: 0;
+                            width: 2.3rem;
+                            margin-right: 2px;
+                        }
+                    }
+                }
+
+                pf-select{
+                    display: flex;
+                    height: 53px;
+                    align-items: flex-end;
+                    .mat-mdc-select{
+                        padding-top: 20px !important;
+                    }
+                    .mat-mdc-form-field-infix{
+                        height: 50px;
+                    }
+    
+                    // *{border-bottom: none !important;}
+                }
+    
+                &::ng-deep pf-text{
+                    .mdc-text-field{padding: 0 !important;}
+                }
+    
             }
         }
+        }
+        
+
+    .--coins{
+        height: 100%;
+        margin-bottom: 1.5rem;
+        .--filters{
+            ._filter-coloumns{width: 22vw;max-width:200px}
+            ._filter-order{width: 20vw;max-width:160px}
+        }
     }
 
-    &.-docked{
-        .-coins{
-            height: 100%;
-            margin-bottom: 1.5rem;
+    .--dock{
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        z-index: 1;
+        position: relative;
+
+        &::before{
+            content: '';
+            position: absolute;
+            top:100%;
+            left: 0;
+            right: 0;
+            height: 100ΩΗΗ;
+            background-color: #f1f1f1;
         }
-        .-charts{
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
+
+        .pf-swipe-tip{
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            .pf-swipe-vertical-img{
+                background: url(/assets/img/swipe-gesture.png) center / 64% no-repeat;
+              }
+            ._animation{
+                margin-top: -20px;
+                width: 130px;
+                overflow: visible;
+                height: 130px;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 100%;
+                border: solid 3px #c5c5c5
+            }
+
+            
+        }
+
+
+        &::ng-deep{
+            .pf-header-stacked-chart{
+                visibility: hidden;
+            }
+        }
+        
+        ._charts{
+            height: 300px;
+            overflow: hidden;
         }
     }
+
+
+    &.--docked{
+        &.--min{
+            .--coins{
+                height: 100%;
+                margin-bottom: 1.5rem;
+            }    
+            .--dock{
+                // opacity: $opac;
+                &:hover{opacity: $noOpac;}
+                &::ng-deep{
+                    .--not-max{
+                        display: none !important;
+                    }
+                    .--bg-blue{
+                        background-color: $maxBlue !important;
+                        border-bottom-color: $maxBlue !important;
+                        border-radius: $borderRadiusInput;
+                        // justify-content: center !important;
+                    }
+                    .--text-white, .pf-icon{
+                        color: $white !important;
+                    }
+                    .pf-header-stacked-chart{
+                        visibility: visible;
+                    }
+                }
+                ._charts{
+                    height: 0;
+                    overflow: hidden;
+
+                    
+                }
+            }
+        }
+
+        &.--max{
+            .--coins{
+                opacity: $opac;
+                
+                &:hover{opacity:$noOpac}
+                &::ng-deep{
+                    ._header{cursor: pointer;}
+                    .--not-max{
+                        display: none !important;
+                    }
+                    .--bg-blue{
+                        background-color: $maxBlue !important;
+                        border-bottom-color: $maxBlue !important;
+                        border-radius: $borderRadiusInput;
+                        // justify-content: center !important;
+                    }
+                    .--text-white, .pf-icon{
+                        color: $white !important;
+                    }
+                }
+                
+            }
+            .--dock{
+                
+                ._charts{
+                    height: 70vh;
+                    // max-height: 100%;
+                }
+            }
+        }
+
+    }
 }
+// :host ::ng-deep{{}
+// .mdc-text-field
