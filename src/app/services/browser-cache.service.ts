@@ -11,9 +11,10 @@ export class PfBrowserCacheService implements PfCacheService {
   }
 
   set(key: string, value: {}): Observable<boolean> {
-    const valueStr = !!value ? JSON.stringify(value) : 'NO VALUE PROVIDED';
-    this._storage.setItem(key, valueStr);
+    if(!value) return of(false);
+    this._storage.setItem(key, JSON.stringify(value));
     return of(true);
+    
   }
 
   remove(key: string): Observable<boolean> {

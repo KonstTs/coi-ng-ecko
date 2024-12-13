@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-
 import { PfCacheService } from '../config/cache';
 
 @Injectable()

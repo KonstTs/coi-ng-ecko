@@ -1,0 +1,80 @@
+@use "../sass/variables" as *;
+.mat-mdc-form-field-subscript-wrapper, .mat-mdc-form-field-bottom-align::before{
+    display: none ;
+}
+.mdc-text-field--filled .mdc-line-ripple::before{
+    border-width:0;
+}
+.mat-mdc-form-field:not(.mat-form-field-disabled) .mat-mdc-floating-label.mdc-floating-label{
+    top:25px
+}
+.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused 
+.mdc-floating-label, 
+.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused 
+.mdc-floating-label--float-above{
+    top:25px
+}
+.mdc-text-field--filled .mdc-floating-label--float-above{
+    top:21px
+}
+.mdc-text-field--filled .mdc-floating-label--float-above{
+    transform: translateY(-80%) scale(0.75);
+}
+.mat-mdc-select{
+    padding-top: 20px;
+}
+div.mat-mdc-select-panel{
+    padding: 5px 0px 15px 5px;
+}
+.mat-mdc-option{
+    padding: 15px 15px 0px 15px !important;
+    min-height: 40px;
+}
+
+.cdk-overlay-connected-position-bounding-box .cdk-overlay-pane{
+    margin-top: -1px;
+}
+
+.mat-mdc-select-value{
+    margin-top: -15px;
+}
+
+.mat-mdc-select-value-text{
+    color: $blue;
+}
+
+.mat-mdc-select-arrow svg{
+    transform: translate(-50%, -80%) !important;
+}
+
+.mat-mdc-form-field-infix{
+    width: 150px;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::before{
+    border-width: 3px !important;
+    border-color: $blue !important;
+}
+
+.mat-mdc-option {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+
+    &.mdc-list-item--selected:not(.mdc-list-item--disabled){
+        .mdc-list-item__primary-text{
+            color: $blue !important;
+        }
+    }
+
+    .mdc-list-item__primary-text{
+        font-size: .96rem !important;
+    
+        &:hover{
+            color: $blue !important;
+        }
+    } 
+}
+
+.material-symbols-outlined{
+    font-weight: 300 !important;
+}

@@ -1,0 +1,31 @@
+<button
+     mat-button 
+     type="button"
+     [attr.class]="config?.styleClass"
+     [attr.style.color]="config?.color"
+     [attr.style.backgroundColor]="config?.bgColor"
+     [ngStyle]="config?.style"
+     [disabled]="!!config.disabled"
+     [ngClass]="{
+          'pf-inline-block': true,
+          'pf-rel': true,
+          'mat-raised-button': config?.raised,
+          'mat-icon-button': config?.raised,
+          'mat-flat-button': config?.flat,
+          'mat-stroked-button': config?.stroked,
+          'pf-motion-fast': true,
+          'mat-icon': config?.icon || icon,
+          'pf-button': true
+     }"
+>
+
+<span 
+     class="pf-icon pf-btn-icon pf-valign pf-abs-left material-symbols-outlined" 
+     [style.color]="config?.iconColor"
+     [style.fontSize]="config?.iconSize"
+>
+     {{config?.icon || icon}}
+</span>
+     <span class="pf-btn-txt">{{config.label}}</span>
+
+</button>

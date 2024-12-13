@@ -1,8 +1,8 @@
 import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { PfBrowserCacheService } from '../shared/services/browser-cache.service';
-import { PfMemoryCacheService } from '../shared/services/memory-cache.service';
+import { PfBrowserCacheService } from '../services/browser-cache.service';
+import { PfMemoryCacheService } from '../services/memory-cache.service';
 
 export const SESSIONSTORAGE_CACHE_TOKEN = new InjectionToken<PfCacheService>('SESSIONSTORAGE_CACHE');
 export const LOCALSTORAGE_CACHE_TOKEN = new InjectionToken<PfCacheService>('LOCALSTORAGE_CACHE');
