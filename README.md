@@ -1,10 +1,28 @@
-# preview
-http://dot-studios.gr/demo/coi-ng-ecko/
-
 # coi-ng-ecko
  Angular-based dashboard spa, performing organised cryptocurrency data representation and graphic visualization
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.11.
+
+
+# preview
+http://dot-studios.gr/demo/coi-ng-ecko/
+
+#run dev
+npm start
+
+#build
+npm run build
+npm run build-prod
+
+#package validation and version compatibility
+npm prestart
+
+#stats
+npm bundle-stats
+
+#report - webpack bundle analyzer
+npm bundle-report
+
 
 ## Development server
 
