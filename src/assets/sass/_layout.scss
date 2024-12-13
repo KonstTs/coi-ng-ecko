@@ -6,7 +6,6 @@
     width: 100%;
     position: relative;
     background-color: #c5c5c5;
-    overflow: hidden;
   
   
     .topbar{
@@ -24,30 +23,17 @@
       border-top: variables.$borderWhite;
       
       ._section{
-        width: 33vw;
         height: inherit;
         // padding:0 2rem;
         display: flex;
         align-items: center;
-
-        ._search{
-          max-width: 360px;
-          color: variables.$inputColor;
-        }
   
-        &.--logo{
+        &.-logo{
+          font-size: 1.56rem;
+          color: variables.$blue;
           text-transform: uppercase;
           font-weight: variables.$fontWeight500;
           line-height: 80%;
-          ._sub{
-            font-size: .6rem;
-            color: variables.$blue;
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            left: auto;
-            top: auto;
-          }
           // border-bottom: solid;
           // border-top: solid;
           // box-shadow: $shadowGentle;
@@ -63,9 +49,9 @@
       padding: 1.5rem 2rem 0 2rem;
       top: variables.$topbarHeight;
 
-      .--docked{
+      .-docked{
         @include helpers.pf-coloumn-flex-mixin;
-        @include helpers.pf-motion-slow-mixin;
+        @include helpers.pf-motion-mixin;
       }
     }
   }

@@ -288,9 +288,6 @@
   .pf-mrg0{
     margin: 0 !important;
   }
-   .pf-mrgl5 {
-    margin-left: 5px !important;
-  }
   .pf-mrgl10 {
     margin-left: 10px !important;
   }
@@ -668,7 +665,7 @@
     display: block !important;
   }
   .pf-inline-block {
-    display: inline-block !important;
+    display: block !important;
   }
   .pf-readonly-input,
   .pf-readonly-input [type='text'] {
@@ -718,23 +715,6 @@
     animation-delay: 5s;
   }
   
-  
-
-
-
-
-
-.pf-swipe-vertical-motion{
-  animation: swipeVertical 5s ease 0s 1 normal forwards;
-}
-
-
-@keyframes swipeVertical {
-  0%, 60%, 100% { transform: translateY(0); }
-  10%, 30%, 50% { transform: translateY(-12px); }
-  20%, 40% { transform: translateY(12px);}
-}
-
 
   
   .pf-blink{
@@ -755,6 +735,9 @@
     100% {opacity: 1 !important;}
   }
   
+  
+  
+  
   @keyframes fadeout {
     0% {opacity: 1;}
     100% {opacity: 0;}
@@ -769,7 +752,8 @@
   .pf-animation-slide-in-right{
     animation: slideInRight 1s ease 0s 1 normal forwards;;
   }
-
+  
+  
   
   
   @keyframes slideInRight {
