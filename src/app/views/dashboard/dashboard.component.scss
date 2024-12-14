@@ -212,7 +212,6 @@
                         background-color: $maxBlue !important;
                         border-bottom-color: $maxBlue !important;
                         border-radius: $borderRadiusInput;
-                        // justify-content: center !important;
                     }
                     .--text-white, .pf-icon{
                         color: $white !important;
@@ -221,9 +220,8 @@
                 
             }
             .--dock{
-                
                 ._charts{
-                    height: 2000px;
+                    height: 70vh;
                     // max-height: 100%;
                 }
             }
