@@ -30,7 +30,7 @@ import { take, tap, map } from 'rxjs/operators';
     [status: string]: { min: number; max: number; x: number; y: number };
   };
 
-
+export type IpfCoords = {x:number, y:number}
   @Directive({
     selector: '[swipe]',
     exportAs: 'swipe',
@@ -49,9 +49,9 @@ import { take, tap, map } from 'rxjs/operators';
     }
 
     nativeEl: HTMLElement;
-    origin: any = { x: 0, y: 0 };
+    origin: IpfCoords = { x: 0, y: 0 };
     style: any = null;
-    rect: any = { x: 0, y: 0 };
+    rect: IpfCoords = { x: 0, y: 0 };
     incrX: number = 0;
     incrY: number = 0;
 
@@ -99,12 +99,11 @@ import { take, tap, map } from 'rxjs/operators';
           }))
         )
       ).subscribe((e: any|MouseEvent) => {
-        this.onDrag=true;
+        this.onDrag = true;
         this.origin = {
           x: e.screenX,
           y: e.screenY
         };
- 
         merge(fromEvent(document, 'mouseup'), fromEvent(document, 'touchend'))
           .pipe(take(1))
           .subscribe(() => {
@@ -119,7 +118,7 @@ import { take, tap, map } from 'rxjs/operators';
               incrX: this.incrX,
               incrY: this.incrY
             });
-            if(this.onSwipeCssClass) this.renderer.removeClass(this.nativeEl, this.onSwipeCssClass);
+            if (this.onSwipeCssClass) this.renderer.removeClass(this.nativeEl, this.onSwipeCssClass);
           });
  
         if (!this.move$) {
@@ -139,7 +138,7 @@ import { take, tap, map } from 'rxjs/operators';
               this.style =
                   this.direction == 'horizontal' ? { transform: 'translateX(' + this.incrX + 'px)' } :
                   this.direction == 'vertical' ? { transform: 'translateY(' + this.incrY + 'px)' } :
-                  { transform: 'translateY(' + this.incrX + 'px,' + this.incrY + 'px)'};
+                  { transform: 'translate(' + this.incrX + 'px,' + this.incrY + 'px)'};
 
 
               if (this.direction && this.isTouched) window.scrollBy(

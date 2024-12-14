@@ -108,7 +108,7 @@ import { PF_CHART_MOBILE_OPTIONS, PF_CHART_OPTIONS } from '../../config/chart-ba
 						status: 'closed',
 						onSwipeCssClass: '__moving',
 						state:{
-							closed: { min: 0, max: 0, x:0, y: 0 },
+							closed: { min: -80, max: -80, x:0, y: -90 },
 							open: { min:70, max:70, x:0, y: 0 }
 						}
 					}"
@@ -182,7 +182,7 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 	stackData: EChartsCoreOption;
 	
 	drawerOpen = false;
-	showDrawerTip = true;
+	showDrawerTip;
 	showDrawer = true;
 	userSwipes = false;
 
@@ -241,19 +241,23 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 		const {element:{status, state}} = e;
 		const limitUp = state[status].max;
 		const limitDown = state[status].min;
-	    
+	
 		if (e.incrY <= limitUp) {
-			this.provideLayout('default')
+			this.provideLayout('default');
 		  	e.element.reset();
 		  	e.element.status = 'open';
-		  	this.drawerOpen = true;
+			this.drawerOpen = true;
 		}
 		if (e.incrY > limitDown) {
 			this.provideLayout('min')
-		  	this._renderer.setStyle(e.element.nativeEl, 'transform', `translateY(0)`);
-		  	e.element.status = 'closed';
+			this._renderer.setStyle(e.element.nativeEl, 'transform', `translateY(0)`);
+			e.element.status = 'closed';
+			e.element.rect.y = 0; 
 			this.drawerOpen = false;
 		};
+		if (e.element.status === 'closed' && e.incrY <= limitDown) { 
+			this._renderer.setStyle(e.element.nativeEl, 'transform', `translateY(0)`);
+		}
 	}
 
 	private cacheDrawerTip(){
@@ -266,14 +270,22 @@ export class PfDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 	
 
 	ngOnInit(): void {
-		this.deCacheDrawerTip$().pipe(untilDestroyed(this))
-			.subscribe(res => { 
-				if (res) this.showDrawerTip = false;
-				else this.cacheDrawerTip()	
-			});
+		
 	}
 
 	ngAfterViewInit(): void {
+		this.deCacheDrawerTip$()
+			.pipe(untilDestroyed(this))
+			.subscribe(res => { 
+				this.showDrawerTip = !res;
+				this.cacheDrawerTip();
+			});
+		
+		setTimeout(_ => { 
+			this.drawer?.setStatus('open');
+			this.drawerOpen = true;
+			this.provideLayout('default');
+		})
 	}
 
 	ngOnDestroy(): void {}
